@@ -1,26 +1,8 @@
 // axios instance
-import axios, { AxiosInstance } from "axios";
 
-const BASE_URL = "https://upskilling-egypt.com:3003/api/v1";
-const IMAGE_URL = "https://upskilling-egypt.com:3003/";
+export const BASE_URL = "https://upskilling-egypt.com:3003/api/v1";
+export const IMAGE_URL = "https://upskilling-egypt.com:3003/";
 
-const axiosInstance: AxiosInstance = axios.create({
-  baseURL: BASE_URL,
-});
-
-// headers
-export const HEADERS = {
-  headers: { Authorization: localStorage.getItem("token") },
-};
-
-// axios interceptors
-axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
 
 //* USER AUTHENTICATION
 export const AUTH_URLS = {
@@ -66,4 +48,4 @@ export const PROJECTS_URLS = {
   EDIT_PROJECT: (id: number) => `/Project/${id}`,
 };
 
-export { TASKS_URLS, USERS_URLS, axiosInstance, IMAGE_URL };
+export { TASKS_URLS, USERS_URLS };
