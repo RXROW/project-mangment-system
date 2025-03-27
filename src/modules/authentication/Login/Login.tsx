@@ -13,11 +13,10 @@ interface LoginData {
 const Login = () => {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginData>();
   const [showPassword, setShowPassword] = useState(false);
-
   const onSubmit : SubmitHandler<LoginData> = async (data) => {
     
     try {
-      let response = await publicInstance.post(AUTH_URLS.LOGIN, data)
+      const response = await publicInstance.post(AUTH_URLS.LOGIN, data)
       console.log(response)
     } catch (error) {
       console.log(error)
