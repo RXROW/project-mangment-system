@@ -1,4 +1,4 @@
-:root {
+/* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -65,4 +65,31 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+} */
+
+.auth-container{
+  background-image: url(./assets/Images/authbg.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.from-container{
+background-color: rgba(49, 89, 81, 0.9);
+}
+
+.auth-btn{
+  background-color: rgba(239, 155, 40, 1) !important;
+}
+
+.line{
+  display: flex;
+    width: 17px;
+    background-color: rgba(239, 155, 40, 1);
+    height: 3px;
+}
+
+.placeholder-custom::placeholder {
+  color: white !important; 
+  opacity: 0.7 !important; 
 }
