@@ -87,6 +87,7 @@ background-color: rgba(49, 89, 81, 0.9);
     width: 17px;
     background-color: rgba(239, 155, 40, 1);
     height: 3px;
+    margin-left: 3px;
 }
 
 .placeholder-custom::placeholder {
