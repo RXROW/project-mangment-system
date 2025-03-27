@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 
 
 
- interface LoginData {
+ interface ResetPasswordData {
   email: string,
   password: string,
   confirmPassword: string,
@@ -19,15 +19,15 @@ import { Link } from 'react-router-dom';
 
  
  const ResetPassword = () => {
- const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginData>();
+ const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<ResetPasswordData>();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
 
-  const onSubmit : SubmitHandler<LoginData> = async (data) => {
+  const onSubmit : SubmitHandler<ResetPasswordData> = async (data) => {
     
     try {
-      let response = await publicInstance.post(AUTH_URLS.LOGIN, data)
+      let response = await publicInstance.post(AUTH_URLS.RESET_PASSWORD, data)
       console.log(response)
     } catch (error) {
       toast.error(error?.response?.data?.message)
