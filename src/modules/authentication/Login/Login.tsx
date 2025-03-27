@@ -4,6 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { emailValidation, passwordValidation } from '../../../services/validation';
 import { publicInstance } from '../../../services/apiConfig';
 import { AUTH_URLS } from '../../../services/apiUrls';
+import { toast } from 'react-toastify';
 
 interface LoginData {
   email: string,
@@ -20,7 +21,7 @@ const Login = () => {
       let response = await publicInstance.post(AUTH_URLS.LOGIN, data)
       console.log(response)
     } catch (error) {
-      console.log(error)
+      toast.error(error?.response?.data?.message)
     }
   }
 
@@ -36,7 +37,7 @@ const Login = () => {
 
 <div className="position-relative">
   <label 
-    className="position-absolute start-0 top-0 px-2" 
+    className="position-absolute start-0 top-0 px-2 " 
     style={{ color: "rgba(239, 155, 40, 1)" }}
   >
     E-mail
@@ -44,7 +45,7 @@ const Login = () => {
   <input
     {...register("email", emailValidation)}
     type="email"
-    className="form-control bg-transparent border-0 border-bottom rounded-0 px-2 pt-4 placeholder-custom"
+    className="form-control bg-transparent border-0 border-bottom rounded-0 px-2 pt-4 placeholder-custom text-white"
     placeholder="Enter your Email"
   />
 </div>
@@ -60,11 +61,11 @@ const Login = () => {
   <input
     {...register("password", passwordValidation)}
     type={showPassword ? "text" : "password"}
-    className="form-control bg-transparent border-0 border-bottom rounded-0 px-2 pt-4 placeholder-custom"
+    className="form-control bg-transparent border-0 border-bottom rounded-0 px-2 pt-4 placeholder-custom text-white"
     placeholder="Enter your Password"
   />
   <button
-    className="btn bg-transparent border-0 position-absolute end-0 top-0"
+    className="btn bg-transparent border-0 position-absolute end-0 top-0 mt-2"
     type="button"
     onClick={() => setShowPassword(!showPassword)}
   >
