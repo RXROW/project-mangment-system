@@ -6,16 +6,9 @@ import { AUTH_URLS } from '../../../services/apiUrls';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { ResetPasswordData } from '../Interfaces/Interfaces';
 
 
-
-
- interface ResetPasswordData {
-  email: string,
-  password: string,
-  confirmPassword: string,
-  seed: string
-}
 
  
  const ResetPassword = () => {

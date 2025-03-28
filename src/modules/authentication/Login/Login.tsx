@@ -5,11 +5,8 @@ import { emailValidation, passwordValidation } from '../../../services/validatio
 import { publicInstance } from '../../../services/apiConfig';
 import { AUTH_URLS } from '../../../services/apiUrls';
 import { toast } from 'react-toastify';
+import { LoginData } from '../Interfaces/Interfaces';
 
-interface LoginData {
-  email: string,
-  password: string
-}
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginData>();

@@ -5,10 +5,9 @@ import { publicInstance } from '../../../services/apiConfig';
 import { AUTH_URLS } from '../../../services/apiUrls';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { ForgetPassData } from '../Interfaces/Interfaces';
 
- interface ForgetPassData {
-  email: string
-}
+
  const ForgetPassword = () => {
 
   const navigate = useNavigate()
