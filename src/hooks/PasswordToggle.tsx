@@ -5,8 +5,7 @@ interface PasswordToggleProps {
 }
 
 const PasswordToggle: React.FC<PasswordToggleProps> = ({ onToggle }) => {
-  const [isVisible, setIsVisible] = useState(false);
-
+  const [isVisible, setIsVisible] = useState(true);
   const toggleVisibility = () => {
     setIsVisible((prev) => !prev);
     onToggle(!isVisible);
@@ -18,7 +17,9 @@ const PasswordToggle: React.FC<PasswordToggleProps> = ({ onToggle }) => {
       type="button"
       onClick={toggleVisibility}
     >
-      <i className={`fas ${isVisible ? "fa-eye-slash" : "fa-eye"} text-light`}></i>
+      <i
+        className={`fas ${isVisible ? "fa-eye-slash" : "fa-eye"} text-light`}
+      ></i>
     </button>
   );
 };

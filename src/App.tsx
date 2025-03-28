@@ -8,6 +8,7 @@ import ResetPassword from './modules/authentication/ResetPassword/ResetPassword'
 import Verification from './modules/authentication/Verification/Verification'
 import AuthLayout from './modules/shared/AuthLayout/AuthLayout'
 import NotFound from './modules/shared/NotFound/NotFound'
+import { Bounce, ToastContainer } from "react-toastify";
 
 function App() {
   const routes = createBrowserRouter([
@@ -27,7 +28,21 @@ function App() {
     },
   ]);
 
-  return <RouterProvider router={routes} />;
+  return <>
+           <RouterProvider router={routes} />
+  <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick={false}
+          rtl
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+          transition={Bounce}
+        /></>;
 }
 
 export default App;

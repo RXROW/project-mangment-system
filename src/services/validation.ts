@@ -15,9 +15,22 @@ export const passwordValidation = {
       "At least 6 characters: UPPER/lowercase, numbers, and special characters",
   },
 };
-
+export const countryValidation = {
+  required: "country is required",
+  minLength: {
+    value: 5,
+    message: "enter chars more than 5 ",
+  },
+};
+export const otpValidation = {
+  required: "OTP is required",
+  maxLength: {
+    value: 6,
+    message: "Otp must be at 6 characters",
+  },
+};
 export const nameValidation = {
-  required: "Name is required",
+   required: "userName is required",
   minLength: {
     value: 3,
     message: "Name must be at least 3 characters long",
@@ -27,8 +40,9 @@ export const nameValidation = {
     message: "Name must be less than 50 characters",
   },
   pattern: {
-    value: /^[A-Za-z\s]+$/,
-    message: "Name can only contain letters and spaces",
+    value: /^[a-zA-Z]+[0-9]+$/,
+    message:
+      "The userName must contain characters and end with numbers without spaces",
   },
 };
 
