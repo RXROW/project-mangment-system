@@ -4,11 +4,13 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { emailValidation, passwordValidation } from '../../../services/validation';
 import { publicInstance } from '../../../services/apiConfig';
 import { AUTH_URLS } from '../../../services/apiUrls';
+import { LoginData } from '../../../interfaces/authInterfaces';
+import PasswordToggle from '../../../hooks/PasswordToggle';
 
-interface LoginData {
-  email: string,
-  password: string
-}
+// interface LoginData {
+//   email: string,
+//   password: string
+// }
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginData>();
@@ -48,7 +50,7 @@ const Login = () => {
     placeholder="Enter your Email"
   />
 </div>
-{errors.email && <span className="text-danger">{String(errors.email.message)}</span>}
+{errors.email && <span className="text-danger">{errors.email.message}</span>}
 
 <div className="position-relative mt-4">
   <label 
@@ -63,15 +65,16 @@ const Login = () => {
     className="form-control bg-transparent border-0 border-bottom rounded-0 px-2 pt-4 placeholder-custom"
     placeholder="Enter your Password"
   />
-  <button
+  {/* <button
     className="btn bg-transparent border-0 position-absolute end-0 top-0"
     type="button"
     onClick={() => setShowPassword(!showPassword)}
   >
     <i className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"} text-light`}></i>
-  </button>
+  </button> */}
+          <PasswordToggle onToggle={setShowPassword}/>
 </div>
-{errors.password && <span className="text-danger">{String(errors.password.message)}</span>}
+{errors.password && <span className="text-danger">{errors.password.message}</span>}
 
 
        
