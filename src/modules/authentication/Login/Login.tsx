@@ -27,7 +27,7 @@ const Login = () => {
   };
 
   return (
-    <div className="col-12 auth-bg p-5 ">
+    <div className="col-12 auth-bg p-5">
       <div className="mb-5 text-start">
         <p className="m-0 text-light">Welcome to PMS</p>
         <h2 className="m-0 fs-1" style={{ color: "rgba(239, 155, 40, 1)" }}>
