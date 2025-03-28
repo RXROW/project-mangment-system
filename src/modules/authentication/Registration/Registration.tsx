@@ -14,27 +14,11 @@ import { AUTH_URLS } from "../../../services/apiUrls";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-interface FormData {
-  profileImage?: FileList;
-  phoneNumber: string;
-  userName: string;
-  country: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-interface RegisterResponse {
-  message?: string;
-}
+import { RegisterData } from "../../../interfaces/authInterfaces";
+import PasswordToggle from "../../../hooks/PasswordToggle";
 const Registration = () => {
   const [showconfirmpassword, setshowconfirmpassword] = useState(true);
   const [showpassword, setshowpassword] = useState(true);
-  function handleshowpass() {
-    setshowpassword((prev) => !prev);
-  }
-  function handleshowconfirmpass() {
-    setshowconfirmpassword((prev) => !prev);
-  }
   const navigate = useNavigate();
   const {
     register,
@@ -42,13 +26,13 @@ const Registration = () => {
     trigger,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<FormData>();
+  } = useForm<RegisterData>();
   const password = watch("password");
   const confirmPassword = watch("confirmPassword");
-  const onSubmit: SubmitHandler<FormData> = async (data) => {
+  const onSubmit: SubmitHandler<RegisterData> = async (data) => {
     const formData = new FormData();
     for (const key in data) {
-      const typedKey = key as keyof FormData;
+      const typedKey = key as keyof RegisterData;
       if (typedKey === "profileImage") {
         formData.append(typedKey, data.profileImage?.[0] as File);
       } else {
@@ -56,7 +40,7 @@ const Registration = () => {
       }
     }
     try {
-      await publicInstance.post<RegisterResponse>(AUTH_URLS.REGISTER, formData);
+      await publicInstance.post(AUTH_URLS.REGISTER, formData);
       navigate("/verify-user", { state: { email: data.email } });
       toast.success("check Your Email ");
     } catch (error: unknown) {
@@ -79,13 +63,14 @@ const Registration = () => {
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor=" profileImage" className="form-label  w-100  ">
-          <div className="d-flex align-items-center justify-content-center flex-column w-100">
+          <div className="d-flex align-items-center justify-content-center">
             <input
               {...register("profileImage")}
               type="file"
               className="form-control d-none"
               id=" profileImage"
             />
+            <img src={imgesregister} alt="" />
           </div>
         </label>
         <div className="d-flex gap-5 pb-3">
@@ -118,23 +103,15 @@ const Registration = () => {
                 {String(errors.country.message)}
               </span>
             )}
-            <div className="pb-3 d-flex align-items-center ">
-              <div className="w-100">
-                <label className="ps-2 color-label">Password</label>
-                <input
-                  {...register("password", passwordValidation)}
-                  type={showpassword ? `password` : `text`}
-                  className="form-control bg-transparent border-0 border-bottom rounded-0 px-2  placeholder-custom"
-                  placeholder="Enter your Password"
-                />
-              </div>
-              <span onClick={handleshowpass}>
-                <i
-                  className={`fas ${
-                    showpassword ? "fa-eye-slash" : "fa-eye"
-                  } text-light`}
-                ></i>
-              </span>
+            <div className="pb-3  position-relative ">
+              <label className="ps-2 color-label">Password</label>
+              <input
+                {...register("password", passwordValidation)}
+                type={showpassword ? `password` : `text`}
+                className="form-control bg-transparent border-0 border-bottom rounded-0 px-2  placeholder-custom"
+                placeholder="Enter your Password"
+              />
+              <PasswordToggle onToggle={setshowpassword} />
             </div>
             {errors.password && (
               <span className="text-danger">
@@ -171,7 +148,7 @@ const Registration = () => {
                 {String(errors.phoneNumber.message)}
               </span>
             )}
-            <div className="pb-3 pb-3 d-flex align-items-center">
+            <div className="pb-3 position-relative">
               <div className="w-100">
                 <label className="ps-2 color-label">Confirm Password</label>
                 <input
@@ -184,13 +161,7 @@ const Registration = () => {
                   placeholder="Confirm New Password"
                 />
               </div>
-              <span onClick={handleshowconfirmpass}>
-                <i
-                  className={`fas ${
-                    showconfirmpassword ? "fa-eye-slash" : "fa-eye"
-                  } text-light`}
-                ></i>
-              </span>
+              <PasswordToggle onToggle={setshowconfirmpassword} />
             </div>
             {errors.confirmPassword && (
               <span className="text-danger">

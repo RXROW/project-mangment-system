@@ -4,10 +4,11 @@ import { publicInstance } from "../../../services/apiConfig";
 import { AUTH_URLS } from "../../../services/apiUrls";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-interface VerifyData {
-  email: string;
-  code: string;
-}
+import { VerfiyData } from "../../../interfaces/authInterfaces";
+// interface VerifyData {
+//   email: string;
+//   code: string;
+// }
 const Verification = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -15,8 +16,8 @@ const Verification = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<VerifyData>({ defaultValues: { email: state?.email || "" } });
-  const onSubmit: SubmitHandler<VerifyData> = async (data) => {
+  } = useForm<VerfiyData>({ defaultValues: { email: state?.email || "" } });
+  const onSubmit: SubmitHandler<VerfiyData> = async (data) => {
     try {
       await publicInstance.put(AUTH_URLS.VERIFY, data);
       navigate("/login");
