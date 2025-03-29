@@ -9,6 +9,7 @@ import { publicInstance } from "../../../services/apiConfig";
 import { AUTH_URLS } from "../../../services/apiUrls";
 import { LoginData } from "../../../interfaces/authInterfaces";
 import PasswordToggle from "../../../hooks/PasswordToggle";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const {
@@ -21,8 +22,10 @@ const Login = () => {
     try {
       const response = await publicInstance.post(AUTH_URLS.LOGIN, data);
       console.log(response);
+      toast.success("Login Success")
     } catch (error) {
       console.log(error);
+      toast.error("Login Failed")
     }
   };
 
