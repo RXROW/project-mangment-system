@@ -16,7 +16,12 @@ export default function AuthLayout() {
                   : "col-md-6 col-sm-9"
               } d-flex flex-column align-items-center  mb-4 `}
             >
-              <img className="w-50 mb-3" src={authlogo} alt="Logo" />
+              <img
+                className=" mb-3"
+                style={{ maxWidth: 400 }}
+                src={authlogo}
+                alt="Logo"
+              />
               <div
                 className={`${
                   register === "/register"

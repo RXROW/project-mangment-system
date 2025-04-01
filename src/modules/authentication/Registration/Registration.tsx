@@ -63,20 +63,25 @@ const Registration = () => {
         </div>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor=" profileImage" className="form-label  w-100  ">
-          <div className="d-flex align-items-center justify-content-center">
+        <div className="d-flex align-items-center justify-content-center mb-3">
+          <label htmlFor="profileImage" className="form-label" role="button">
             <input
               {...register("profileImage")}
               type="file"
               className="form-control d-none"
-              id=" profileImage"
+              id="profileImage"
             />
-            <img src={imgesregister} alt="" />
-          </div>
-        </label>
+            <img
+              src={imgesregister}
+              className=" rounded-circle"
+              style={{ width: 120, height: 120 }}
+              alt=""
+            />
+          </label>
+        </div>
         <div className="row">
           <div className="col-md-6">
-            <div className="pb-3">
+            <div className="pb-3 mb-3">
               <label className="ps-2 color-label my-1">User Name</label>
               <input
                 {...register("userName", nameValidation)}
@@ -90,9 +95,9 @@ const Registration = () => {
                 </span>
               )}
             </div>
-          </div>{" "}
+          </div>
           <div className="col-md-6">
-            <div className="pb-3">
+            <div className="pb-3 mb-3">
               <label className="ps-2 color-label my-1">E-mail</label>
               <input
                 {...register("email", emailValidation)}
@@ -108,7 +113,7 @@ const Registration = () => {
             </div>
           </div>
           <div className="col-md-6">
-            <div className="pb-3">
+            <div className="pb-3 mb-3">
               <label className="ps-2 color-label my-1">Country</label>
               <input
                 {...register("country", countryValidation)}
@@ -124,7 +129,7 @@ const Registration = () => {
             </div>
           </div>
           <div className="col-md-6">
-            <div className="pb-3">
+            <div className="pb-3 mb-3">
               <label className="ps-2 color-label my-1">phone Number</label>
               <input
                 {...register("phoneNumber", phoneValidation)}
@@ -140,7 +145,7 @@ const Registration = () => {
             </div>
           </div>
           <div className="col-md-6">
-            <div className="pb-3  position-relative  ">
+            <div className="pb-3 mb-3  position-relative  ">
               <label className="ps-2 color-label my-1">Password</label>
               <input
                 {...register("password", passwordValidation)}
@@ -157,7 +162,7 @@ const Registration = () => {
             </div>
           </div>
           <div className="col-md-6">
-            <div className="pb-3 position-relative">
+            <div className="pb-3 mb-3 position-relative">
               <label className="ps-2 color-label my-1">Confirm Password</label>
               <input
                 {...register(
@@ -177,7 +182,7 @@ const Registration = () => {
             </div>
           </div>
           <div className="col-md-8 d-flex justify-content-center align-items-center mx-auto">
-            <div className="auth-btn rounded-pill  w-100 my-3 my-md-5">
+            <div className="auth-btn rounded-pill  w-100 my-3 ">
               <button
                 disabled={isSubmitting}
                 type="submit"
