@@ -9,6 +9,9 @@ import Verification from './modules/authentication/Verification/Verification'
 import AuthLayout from './modules/shared/AuthLayout/AuthLayout'
 import NotFound from './modules/shared/NotFound/NotFound'
 import { Bounce, ToastContainer } from "react-toastify";
+import Dashboard from './modules/dashboard/Dashboard'
+import MasterLayout from './modules/shared/MasterLayout/MasterLayout'
+import ProtectedRoute from './modules/shared/ProtectedRoute/ProtectedRoute'
 
 function App() {
   const routes = createBrowserRouter([
@@ -25,10 +28,21 @@ function App() {
         { path: "reset-password", element: <ResetPassword /> },
         { path: "change-password", element: <ChangePassword /> },
       ],
-    },
+    },{
+      path: '/dashboard',
+      element:    <ProtectedRoute>
+                      <MasterLayout/>
+                  </ProtectedRoute> ,
+      errorElement: <NotFound/>,
+      children: [
+        {index: true, element: <Dashboard/>},
+        {path: 'dashboard', element: <Dashboard/>},
+      ]
+    }
   ]);
 
   return <>
+    
            <RouterProvider router={routes} />
   <ToastContainer
           position="top-center"
