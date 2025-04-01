@@ -5,6 +5,7 @@ import { privateInstance } from "../../../services/apiConfig";
 import { AUTH_URLS } from "../../../services/apiUrls";
 import { ChangeData } from "../../../interfaces/authInterfaces";
 import PasswordToggle from "../../../hooks/PasswordToggle";
+import Button from "../../shared/Button/Button";
 
 //  interface ChangeData {
 //   oldPassword: string,
@@ -129,17 +130,7 @@ const ChangePassword = () => {
             {errors.confirmNewPassword.message}
           </span>
         )}
-
-        <button
-          disabled={isSubmitting}
-          type="submit"
-          className="btn auth-btn w-100 rounded-5 text-light submit mt-5"
-        >
-          {isSubmitting && (
-            <span className="spinner-border spinner-border-sm mr-1 mx-1"></span>
-          )}
-          Save
-        </button>
+        <Button isSubmitting={isSubmitting}>save</Button>
       </form>
     </div>
   );
