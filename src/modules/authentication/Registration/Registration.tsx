@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { RegisterData } from "../../../interfaces/authInterfaces";
 import PasswordToggle from "../../../hooks/PasswordToggle";
+import Button from "../../shared/Button/Button";
 
 const Registration = () => {
   const [showconfirmpassword, setshowconfirmpassword] = useState(true);
@@ -182,18 +183,7 @@ const Registration = () => {
             </div>
           </div>
           <div className="col-md-8 d-flex justify-content-center align-items-center mx-auto">
-            <div className="auth-btn rounded-pill  w-100 my-3 ">
-              <button
-                disabled={isSubmitting}
-                type="submit"
-                className="btn text-white border-0  w-100 py-2 py-md-3"
-              >
-                {isSubmitting && (
-                  <span className="spinner-border spinner-border-sm mr-1 mx-1"></span>
-                )}
-                Save
-              </button>
-            </div>
+            <Button isSubmitting={isSubmitting}>save</Button>
           </div>
         </div>
       </form>
