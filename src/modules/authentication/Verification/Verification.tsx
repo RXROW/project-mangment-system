@@ -5,6 +5,8 @@ import { AUTH_URLS } from "../../../services/apiUrls";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { VerfiyData } from "../../../interfaces/authInterfaces";
+import Button from "../../shared/Button/Button";
+import TitleAuth from "../../shared/TitleAuth/TitleAuth";
 // interface VerifyData {
 //   email: string;
 //   code: string;
@@ -21,19 +23,15 @@ const Verification = () => {
     try {
       await publicInstance.put(AUTH_URLS.VERIFY, data);
       navigate("/login");
-      toast.success(" Create Accoount Successlly");
+      toast.success(" Create Account Successfully");
     } catch (error: unknown) {
       toast.error(error.response.data.message || " Error Happen");
     }
   };
   return (
-    <div className="p-5 ">
-      <div className="mb-5 text-start ">
-        <p className="m-0 text-light">Welcome to PMS</p>
-        <h2 className="m-0 fs-1 color-label">Verify Account</h2>
-        <span className="line"></span>
-      </div>
-      <form onSubmit={handleSubmit(onSubmit)} className="mb-3">
+    <div className="p-5 col-12 ">
+      <TitleAuth name="Verify Account" />
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="pb-3">
           <label className="ps-2 color-label">User Name</label>
           <input
@@ -58,16 +56,7 @@ const Verification = () => {
         {errors.code && (
           <span className="text-danger">{String(errors.code.message)}</span>
         )}
-        <button
-          disabled={isSubmitting}
-          type="submit"
-          className="btn auth-btn w-100 rounded-5 text-light submit"
-        >
-          {isSubmitting && (
-            <span className="spinner-border spinner-border-sm mr-1 mx-1"></span>
-          )}
-          Save
-        </button>
+        <Button isSubmitting={isSubmitting}>save</Button>
       </form>
     </div>
   );

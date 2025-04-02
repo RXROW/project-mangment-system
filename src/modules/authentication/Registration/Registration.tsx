@@ -16,6 +16,9 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { RegisterData } from "../../../interfaces/authInterfaces";
 import PasswordToggle from "../../../hooks/PasswordToggle";
+import Button from "../../shared/Button/Button";
+import TitleAuth from "../../shared/TitleAuth/TitleAuth";
+
 const Registration = () => {
   const [showconfirmpassword, setshowconfirmpassword] = useState(true);
   const [showpassword, setshowpassword] = useState(true);
@@ -53,58 +56,93 @@ const Registration = () => {
     }
   }, [confirmPassword, trigger, password]);
   return (
-    <>
-      <div className="p-2">
-        <div className=" text-start">
-          <p className="m-0 text-light">Welcome to PMS</p>
-          <h2 className="m-0 fs-1 color-label">Create New Account</h2>
-          <span className="line"></span>
-        </div>
-      </div>
+    <div className=" col-12  p-5">
+      <TitleAuth name="Create New Account" />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor=" profileImage" className="form-label  w-100  ">
-          <div className="d-flex align-items-center justify-content-center">
+        <div className="d-flex align-items-center justify-content-center mb-3">
+          <label htmlFor="profileImage" className="form-label" role="button">
             <input
               {...register("profileImage")}
               type="file"
               className="form-control d-none"
-              id=" profileImage"
+              id="profileImage"
             />
-            <img src={imgesregister} alt="" />
-          </div>
-        </label>
-        <div className="d-flex gap-5 pb-3">
-          <div className="first-colum w-100">
-            <div className="pb-3">
-              <label className="ps-2 color-label">User Name</label>
+            <img
+              src={imgesregister}
+              className=" rounded-circle"
+              style={{ width: 120, height: 120 }}
+              alt=""
+            />
+          </label>
+        </div>
+        <div className="row">
+          <div className="col-md-6">
+            <div className="pb-3 mb-3">
+              <label className="ps-2 color-label my-1">User Name</label>
               <input
                 {...register("userName", nameValidation)}
                 type="text"
                 className="form-control bg-transparent border-0 border-bottom rounded-0 px-2  placeholder-custom"
                 placeholder="Enter your name"
               />
+              {errors.userName && (
+                <span className="text-danger">
+                  {String(errors.userName.message)}
+                </span>
+              )}
             </div>
-            {errors.userName && (
-              <span className="text-danger">
-                {String(errors.userName.message)}
-              </span>
-            )}
-            <div className="pb-3">
-              <label className="ps-2 color-label">Country</label>
+          </div>
+          <div className="col-md-6">
+            <div className="pb-3 mb-3">
+              <label className="ps-2 color-label my-1">E-mail</label>
+              <input
+                {...register("email", emailValidation)}
+                type="text"
+                className="form-control bg-transparent border-0 border-bottom rounded-0 px-2  placeholder-custom"
+                placeholder="Enter your Email"
+              />
+              {errors.email && (
+                <span className="text-danger">
+                  {String(errors.email.message)}
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="pb-3 mb-3">
+              <label className="ps-2 color-label my-1">Country</label>
               <input
                 {...register("country", countryValidation)}
                 type="text"
                 className="form-control bg-transparent border-0 border-bottom rounded-0 px-2  placeholder-custom"
                 placeholder="Enter your country"
               />
+              {errors.country && (
+                <span className="text-danger">
+                  {String(errors.country.message)}
+                </span>
+              )}
             </div>
-            {errors.country && (
-              <span className="text-danger">
-                {String(errors.country.message)}
-              </span>
-            )}
-            <div className="pb-3  position-relative ">
-              <label className="ps-2 color-label">Password</label>
+          </div>
+          <div className="col-md-6">
+            <div className="pb-3 mb-3">
+              <label className="ps-2 color-label my-1">phone Number</label>
+              <input
+                {...register("phoneNumber", phoneValidation)}
+                type="text"
+                className="form-control bg-transparent border-0 border-bottom rounded-0 px-2  placeholder-custom"
+                placeholder="Enter your phone number"
+              />
+              {errors.phoneNumber && (
+                <span className="text-danger">
+                  {String(errors.phoneNumber.message)}
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="pb-3 mb-3  position-relative  ">
+              <label className="ps-2 color-label my-1">Password</label>
               <input
                 {...register("password", passwordValidation)}
                 type={showpassword ? `password` : `text`}
@@ -112,78 +150,39 @@ const Registration = () => {
                 placeholder="Enter your Password"
               />
               <PasswordToggle onToggle={setshowpassword} />
+              {errors.password && (
+                <span className="text-danger">
+                  {String(errors.password.message)}
+                </span>
+              )}
             </div>
-            {errors.password && (
-              <span className="text-danger">
-                {String(errors.password.message)}
-              </span>
-            )}
           </div>
-          <div className="second-colums w-100">
-            <div className="pb-3">
-              <label className="ps-2 color-label">E-mail</label>
+          <div className="col-md-6">
+            <div className="pb-3 mb-3 position-relative">
+              <label className="ps-2 color-label my-1">Confirm Password</label>
               <input
-                {...register("email", emailValidation)}
-                type="text"
+                {...register(
+                  "confirmPassword",
+                  confirmPasswordValidation(password)
+                )}
+                type={showconfirmpassword ? `password` : `text`}
                 className="form-control bg-transparent border-0 border-bottom rounded-0 px-2  placeholder-custom"
-                placeholder="Enter your Email"
+                placeholder="Confirm New Password"
               />
-            </div>
-            {errors.email && (
-              <span className="text-danger">
-                {String(errors.email.message)}
-              </span>
-            )}
-            <div className="pb-3">
-              <label className="ps-2 color-label">phone Number</label>
-              <input
-                {...register("phoneNumber", phoneValidation)}
-                type="text"
-                className="form-control bg-transparent border-0 border-bottom rounded-0 px-2  placeholder-custom"
-                placeholder="Enter your phone number"
-              />
-            </div>
-            {errors.phoneNumber && (
-              <span className="text-danger">
-                {String(errors.phoneNumber.message)}
-              </span>
-            )}
-            <div className="pb-3 position-relative">
-              <div className="w-100">
-                <label className="ps-2 color-label">Confirm Password</label>
-                <input
-                  {...register(
-                    "confirmPassword",
-                    confirmPasswordValidation(password)
-                  )}
-                  type={showconfirmpassword ? `password` : `text`}
-                  className="form-control bg-transparent border-0 border-bottom rounded-0 px-2  placeholder-custom"
-                  placeholder="Confirm New Password"
-                />
-              </div>
               <PasswordToggle onToggle={setshowconfirmpassword} />
+              {errors.confirmPassword && (
+                <span className="text-danger">
+                  {String(errors.confirmPassword.message)}
+                </span>
+              )}
             </div>
-            {errors.confirmPassword && (
-              <span className="text-danger">
-                {String(errors.confirmPassword.message)}
-              </span>
-            )}
           </div>
-        </div>
-        <div className="text-center">
-          <button
-            disabled={isSubmitting}
-            type="submit"
-            className="btn auth-btn  w-75 rounded-5 text-light submit"
-          >
-            {isSubmitting && (
-              <span className="spinner-border spinner-border-sm mr-1 mx-1"></span>
-            )}
-            Save
-          </button>
+          <div className="col-md-8 d-flex justify-content-center align-items-center mx-auto">
+            <Button isSubmitting={isSubmitting}>save</Button>
+          </div>
         </div>
       </form>
-    </>
+    </div>
   );
 };
 
