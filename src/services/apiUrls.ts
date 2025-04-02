@@ -46,6 +46,7 @@ export const PROJECTS_URLS = {
   ADD_PROJECT: `/Project`,
   GET_PROJECT: (id: number) => `Project/${id}`,
   EDIT_PROJECT: (id: number) => `/Project/${id}`,
+  GET_ALL_PROJECTS: `/Project/`
 };
 
 export { TASKS_URLS, USERS_URLS };

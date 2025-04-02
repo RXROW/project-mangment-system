@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
   emailValidation,
@@ -9,9 +9,9 @@ import { publicInstance } from "../../../services/apiConfig";
 import { AUTH_URLS } from "../../../services/apiUrls";
 import { LoginData } from "../../../interfaces/authInterfaces";
 import PasswordToggle from "../../../hooks/PasswordToggle";
+import { toast } from "react-toastify";
 import Button from "../../shared/Button/Button";
 import TitleAuth from "../../shared/TitleAuth/TitleAuth";
-
 const Login = () => {
   const {
     register,
@@ -19,12 +19,19 @@ const Login = () => {
     formState: { errors, isSubmitting },
   } = useForm<LoginData>();
   const [showPassword, setShowPassword] = useState(true);
+  const navigate= useNavigate()
   const onSubmit: SubmitHandler<LoginData> = async (data) => {
     try {
       const response = await publicInstance.post(AUTH_URLS.LOGIN, data);
       console.log(response);
+      const token = response?.data?.token
+      localStorage.setItem('token', token)
+      // console.log(token)
+      navigate("/dashboard")
+      toast.success("Login Successfuly")
     } catch (error) {
       console.log(error);
+      toast.error("Something Wrong")
     }
   };
 

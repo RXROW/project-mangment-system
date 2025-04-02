@@ -67,6 +67,9 @@ button:focus-visible {
   }
 } */
 
+
+
+
 .auth-container {
   background-image: url(./assets/Images/authbg.png);
   background-position: center;
@@ -95,6 +98,91 @@ button:focus-visible {
   margin-left: 3px;
 }
 
+
+
+/*/////////////Header///////////////////////*/
+
+header{
+  background-image: url(./assets/Images/home-bg.png);
+  height: 310px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    
+}
+
+/*////////////Header///////////////////////*/
+
+/*///////////////SideBar////////////////////*/
+
+.sidebar-container.light {
+  position: sticky;
+  top: 0;
+}
+.ps-sidebar-container{
+  min-height: 100vh !important;
+}
+
+.sidebar-container .ps-sidebar-container{
+  background-color: rgba(14, 56, 47, 1) !important;
+}
+.sidebar-container.light .ps-sidebar-container {
+  background-color: #0E382F;
+}
+.sidebar-container.dark .ps-sidebar-container {
+  background-color: #000;
+}
+.sidebar-container .ps-menu-root {
+  height: calc(100vh - 55px);
+  background-color: #0E382F;
+  padding-top: 50px;
+}
+.sidebar-container .ps-menu-button:hover {
+  background: transparent !important;
+}
+.sidebar-container .ps-menu-button {
+  transition: 0.5s;
+}
+.sidebar-container .ps-menu-button .ps-menu-icon{
+  color: #fff;
+  font-size: 18px;
+  transition: 0.5s;
+}
+.sidebar-container .ps-menu-button .ps-menu-label {
+  color: #fff;
+  transition: 0.5s;
+}
+.sidebar-container .ps-menu-button .ps-menu-label:hover {
+  color: #EF9B28 !important;
+}
+.sidebar-container .ps-menu-button .ps-menu-icon:hover {
+  color: #EF9B28 !important;
+}
+.sidebar-container .icon-left {
+  position: absolute;
+  top: 10px;
+  right: 0;
+  background-color: #EF9B28;
+  border-radius: 5px 0 0 5px;
+  cursor: pointer;
+}
+.sidebar-container .icon-left img {
+  padding-bottom: 5px;
+  width: 20px;
+}
+.sidebar-container .icon-right {
+  position: absolute;
+  top: 10px;
+  right: 0;
+  background-color: #EF9B28;
+  border-radius: 5px 0 0 5px;
+  cursor: pointer;
+}
+.sidebar-container .ps-menuitem-root.ps-active {
+background-color: #EF9B284D; 
+color: rgba(239, 155, 40, 1) !important;
+}
+
+/*///////////////////////////SideBar//////////////////////////*/
 .placeholder-custom,
 .placeholder-custom::placeholder {
   color: white !important;
