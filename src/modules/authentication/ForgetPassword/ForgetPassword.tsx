@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { ForgetPassData } from "../../../interfaces/authInterfaces";
 import Button from "../../shared/Button/Button";
+import TitleAuth from "../../shared/TitleAuth/TitleAuth";
 
 const ForgetPassword = () => {
   const navigate = useNavigate();
@@ -34,20 +35,10 @@ const ForgetPassword = () => {
 
   return (
     <div className="col-12 auth-bg p-5 ">
-      <div className="mb-5 text-start">
-        <p className="m-0 text-light">Welcome to PMS</p>
-        <h2 className="m-0 fs-1" style={{ color: "rgba(239, 155, 40, 1)" }}>
-          Forget Password
-        </h2>
-        <span className="line"></span>
-      </div>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="mb-3">
+      <TitleAuth name="Forget Password" />
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="position-relative">
-          <label
-            className="position-absolute start-0 top-0 px-2 "
-            style={{ color: "rgba(239, 155, 40, 1)" }}
-          >
+          <label className="position-absolute start-0 top-0 px-2 color-label ">
             E-mail
           </label>
           <input

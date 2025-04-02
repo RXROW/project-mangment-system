@@ -4,7 +4,7 @@ interface ButtonProps {
 }
 export default function Button({ children, isSubmitting }: ButtonProps) {
   return (
-    <div className="auth-btn rounded-pill  w-100  my-3 ">
+    <div className="auth-btn rounded-pill  w-100  mt-4 ">
       <button
         disabled={isSubmitting}
         type="submit"

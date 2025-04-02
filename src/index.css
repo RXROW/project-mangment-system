@@ -85,7 +85,7 @@ button:focus-visible {
   background-color: rgba(239, 155, 40, 1) !important;
 }
 .color-label {
-  color: rgba(239, 155, 40, 1);
+  color: rgba(239, 155, 40, 1) !important;
 }
 .line {
   display: flex;

@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { VerfiyData } from "../../../interfaces/authInterfaces";
 import Button from "../../shared/Button/Button";
+import TitleAuth from "../../shared/TitleAuth/TitleAuth";
 // interface VerifyData {
 //   email: string;
 //   code: string;
@@ -28,13 +29,9 @@ const Verification = () => {
     }
   };
   return (
-    <div className="p-5 ">
-      <div className="mb-5 text-start ">
-        <p className="m-0 text-light">Welcome to PMS</p>
-        <h2 className="m-0 fs-1 color-label">Verify Account</h2>
-        <span className="line"></span>
-      </div>
-      <form onSubmit={handleSubmit(onSubmit)} className="mb-3">
+    <div className="p-5 col-12 ">
+      <TitleAuth name="Verify Account" />
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="pb-3">
           <label className="ps-2 color-label">User Name</label>
           <input

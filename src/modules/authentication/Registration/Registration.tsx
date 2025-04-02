@@ -17,6 +17,7 @@ import { toast } from "react-toastify";
 import { RegisterData } from "../../../interfaces/authInterfaces";
 import PasswordToggle from "../../../hooks/PasswordToggle";
 import Button from "../../shared/Button/Button";
+import TitleAuth from "../../shared/TitleAuth/TitleAuth";
 
 const Registration = () => {
   const [showconfirmpassword, setshowconfirmpassword] = useState(true);
@@ -55,14 +56,8 @@ const Registration = () => {
     }
   }, [confirmPassword, trigger, password]);
   return (
-    <div className=" p-5">
-      <div className="p-2">
-        <div className=" text-start">
-          <p className="m-0 text-light">Welcome to PMS</p>
-          <h2 className="m-0 fs-1 color-label">Create New Account</h2>
-          <span className="line"></span>
-        </div>
-      </div>
+    <div className=" col-12  p-5">
+      <TitleAuth name="Create New Account" />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="d-flex align-items-center justify-content-center mb-3">
           <label htmlFor="profileImage" className="form-label" role="button">
