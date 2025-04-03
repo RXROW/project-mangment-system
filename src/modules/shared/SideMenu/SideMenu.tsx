@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import   { useEffect, useState } from 'react';
 import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import leftIcon from '../../../assets/Images/chevron-left.png';
 import rightIcon from '../../../assets/Images/chevron-right.png';
@@ -34,7 +34,7 @@ const SideMenu = () => {
 
   return (
     <>
-      <div className="sidebar-container">
+      <div className="sidebar-container vh-100 ">
         <Sidebar collapsed={isCollapsed}>
           <Menu>
             <div onClick={toggle} className={`icon-left ${isCollapsed ? 'icon-right' : ''}`}>
@@ -46,7 +46,7 @@ const SideMenu = () => {
             </MenuItem>
 
             {loginData?.userGroup !== 'Employee' && (
-              <MenuItem component={<Link to="#" />} title="users" icon={<i className="fa-sharp fa-solid fa-users"></i>}
+              <MenuItem component={<Link to="/dashboard/users" />} title="users" icon={<i className="fa-sharp fa-solid fa-users"></i>}
                 active={activeItem === 'users'} onClick={() => handleItemClick('users')}> Users 
               </MenuItem>
             )}
