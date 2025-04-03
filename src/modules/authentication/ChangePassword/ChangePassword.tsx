@@ -5,6 +5,8 @@ import { privateInstance } from "../../../services/apiConfig";
 import { AUTH_URLS } from "../../../services/apiUrls";
 import { ChangeData } from "../../../interfaces/authInterfaces";
 import PasswordToggle from "../../../hooks/PasswordToggle";
+import Button from "../../shared/Button/Button";
+import TitleAuth from "../../shared/TitleAuth/TitleAuth";
 
 //  interface ChangeData {
 //   oldPassword: string,
@@ -37,20 +39,10 @@ const ChangePassword = () => {
 
   return (
     <div className="col-12 auth-bg p-5 ">
-      <div className="mb-5 text-start">
-        <p className="m-0 text-light">Welcome to PMS</p>
-        <h2 className="m-0 fs-1" style={{ color: "rgba(239, 155, 40, 1)" }}>
-          Change Password
-        </h2>
-        <span className="line"></span>
-      </div>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="mb-3">
+      <TitleAuth name="Change Password" />
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="position-relative mt-4">
-          <label
-            className="position-absolute start-0 top-0 px-2"
-            style={{ color: "rgba(239, 155, 40, 1)" }}
-          >
+          <label className="position-absolute start-0 top-0 px-2 color-label">
             Old Password
           </label>
           <input
@@ -73,10 +65,7 @@ const ChangePassword = () => {
         )}
 
         <div className="position-relative mt-4">
-          <label
-            className="position-absolute start-0 top-0 px-2"
-            style={{ color: "rgba(239, 155, 40, 1)" }}
-          >
+          <label className="position-absolute start-0 top-0 px-2 color-label">
             New Password
           </label>
           <input
@@ -99,10 +88,7 @@ const ChangePassword = () => {
         )}
 
         <div className="position-relative mt-4 ">
-          <label
-            className="position-absolute start-0 top-0 px-2"
-            style={{ color: "rgba(239, 155, 40, 1)" }}
-          >
+          <label className="position-absolute start-0 top-0 px-2 color-label">
             Confirm New Password
           </label>
           <input
@@ -129,17 +115,7 @@ const ChangePassword = () => {
             {errors.confirmNewPassword.message}
           </span>
         )}
-
-        <button
-          disabled={isSubmitting}
-          type="submit"
-          className="btn auth-btn w-100 rounded-5 text-light submit mt-5"
-        >
-          {isSubmitting && (
-            <span className="spinner-border spinner-border-sm mr-1 mx-1"></span>
-          )}
-          Save
-        </button>
+        <Button isSubmitting={isSubmitting}>save</Button>
       </form>
     </div>
   );

@@ -10,7 +10,8 @@ import { AUTH_URLS } from "../../../services/apiUrls";
 import { LoginData } from "../../../interfaces/authInterfaces";
 import PasswordToggle from "../../../hooks/PasswordToggle";
 import { toast } from "react-toastify";
-
+import Button from "../../shared/Button/Button";
+import TitleAuth from "../../shared/TitleAuth/TitleAuth";
 const Login = () => {
   const {
     register,
@@ -35,21 +36,11 @@ const Login = () => {
   };
 
   return (
-    <div className="col-12 auth-bg p-5 ">
-      <div className="mb-5 text-start">
-        <p className="m-0 text-light">Welcome to PMS</p>
-        <h2 className="m-0 fs-1" style={{ color: "rgba(239, 155, 40, 1)" }}>
-          Login
-        </h2>
-        <span className="line"></span>
-      </div>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="mb-3">
+    <div className="col-12 p-5">
+      <TitleAuth name="Login" />
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="position-relative">
-          <label
-            className="position-absolute start-0 top-0 px-2"
-            style={{ color: "rgba(239, 155, 40, 1)" }}
-          >
+          <label className="position-absolute start-0 top-0 px-2 color-label">
             E-mail
           </label>
           <input
@@ -64,10 +55,7 @@ const Login = () => {
         )}
 
         <div className="position-relative mt-4">
-          <label
-            className="position-absolute start-0 top-0 px-2"
-            style={{ color: "rgba(239, 155, 40, 1)" }}
-          >
+          <label className="position-absolute start-0 top-0 px-2 color-label">
             Password
           </label>
           <input
@@ -76,13 +64,6 @@ const Login = () => {
             className="form-control bg-transparent border-0 border-bottom rounded-0 px-2 pt-4 placeholder-custom"
             placeholder="Enter your Password"
           />
-          {/* <button
-    className="btn bg-transparent border-0 position-absolute end-0 top-0"
-    type="button"
-    onClick={() => setShowPassword(!showPassword)}
-  >
-    <i className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"} text-light`}></i>
-  </button> */}
           <PasswordToggle onToggle={setShowPassword} />
         </div>
         {errors.password && (
@@ -100,17 +81,7 @@ const Login = () => {
             Forget Password?
           </Link>
         </div>
-
-        <button
-          disabled={isSubmitting}
-          type="submit"
-          className="btn auth-btn w-100 rounded-5 text-light submit"
-        >
-          {isSubmitting && (
-            <span className="spinner-border spinner-border-sm mr-1 mx-1"></span>
-          )}
-          Login
-        </button>
+        <Button isSubmitting={isSubmitting}> Login</Button>
       </form>
     </div>
   );
