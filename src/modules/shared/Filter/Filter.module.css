@@ -1,0 +1,34 @@
+:root {
+  --filter-bg: #ffffff;
+  --label-color: #696969;
+  --placeholder-color: #c1c1c1;
+  --btn-dark-text: #0e382f;
+  --btn-ligth-bg: #ef9b28;
+  --filter-input-bg: #ffffff;
+}
+
+ 
+.filtration-container {
+  background-color: var(--filter-bg);
+}
+.input {
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
+  border-color: var(--label-color) !important;
+  color: var(--label-color) !important;
+  background-color: var(--filter-input-bg);
+}
+.input:focus {
+  background-color: var(--filter-input-bg) !important;
+}
+.input::placeholder {
+  color: var(--label-color) !important;
+}
+.icon {
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+  border-color: var(--label-color) !important;
+  background-color: var(--filter-input-bg) !important;
+  color: var(--label-color) !important;
+  fill: var(--label-color) !important;
+}

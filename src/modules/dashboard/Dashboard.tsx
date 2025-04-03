@@ -29,7 +29,7 @@ const Dashboard = () => {
         setActive(userResponse?.data?.activatedEmployeeCount);
         setInActive(userResponse?.data?.deactivatedEmployeeCount);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
 
@@ -38,7 +38,7 @@ const Dashboard = () => {
 
   return (
     <div className="p-4">
-      <header className='rounded-4 p-5 text-light mb-5'>
+      <header className='rounded-4 p-5 text-light mb-5 '>
         <div className="header-container">
           <div className="header-content py-4">
             <h1 className='mb-4 fw-normal'>
@@ -49,7 +49,7 @@ const Dashboard = () => {
         </div>
       </header>
 
-      <div className="container">
+      <div className="container ">
         <div className="d-flex flex-wrap justify-content-center w-100 gap-3">
           <div className="bg-light p-3 col-12 col-md-6 rounded-3">
             <div className="border-start border-warning border-4 px-3 mb-4">
