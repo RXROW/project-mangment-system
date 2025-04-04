@@ -27,7 +27,7 @@ const Dashboard = () => {
         setActive(userData.activatedEmployeeCount);
         setInActive(userData.deactivatedEmployeeCount);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
 
@@ -35,6 +35,7 @@ const Dashboard = () => {
   }, []);
 
   return (
+
     <div className="">
       <div className="container p-4">
         <header className='rounded-4 p-5 text-light mb-5'>
@@ -45,13 +46,17 @@ const Dashboard = () => {
               </h1>
               <h2 className='fw-normal'>You can add projects and assign tasks to your team</h2>
             </div>
+
+   
           </div>
         </header>
       </div>
 
+
       <div className="container_fluid">
         <div className="row justify-content-center w-100 gap-3">
           <div className="col-12 col-md-6 bg-light p-4 rounded-3 shadow-sm">
+
             <div className="border-start border-warning border-4 px-3 mb-4">
               <h2 className="mb-1">Tasks</h2>
               <p className="text-muted">Manage your tasks efficiently.</p>

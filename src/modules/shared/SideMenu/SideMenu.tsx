@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import   { useEffect, useState } from 'react';
 import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import leftIcon from '../../../assets/Images/chevron-left.png';
 import rightIcon from '../../../assets/Images/chevron-right.png';
@@ -33,6 +33,7 @@ const SideMenu = () => {
   };
 
   return (
+
     <div className="sidebar-container">
       <Sidebar collapsed={isCollapsed}>
         <Menu>
@@ -40,6 +41,7 @@ const SideMenu = () => {
           <div onClick={toggle} className={`icon-left ${isCollapsed ? 'icon-right' : ''}`}>
             <img src={isCollapsed ? rightIcon : leftIcon} alt="toggle icon" />
           </div>
+
 
           <MenuItem component={<Link to="/dashboard" />} title="Home" icon={<i className="fa fa-home"></i>}
             active={activeItem === 'home'} onClick={() => handleItemClick('home')}>
@@ -54,10 +56,12 @@ const SideMenu = () => {
             </MenuItem>
           )}
 
+
           <MenuItem component={<Link to="#" />} title="Projects" icon={<i className="fa-solid fa-chart-column"></i>}
             active={activeItem === 'projects'} onClick={() => handleItemClick('projects')}>
             Projects
           </MenuItem>
+
 
           <MenuItem component={<Link to="#" />} title="Tasks" icon={<i className="fa fa-list-check"></i>}
             active={activeItem === 'tasks'} onClick={() => handleItemClick('tasks')}>
