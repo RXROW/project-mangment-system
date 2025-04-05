@@ -68,6 +68,10 @@ button:focus-visible {
 } */
 
 
+body {
+  font-family: 'Montserrat', sans-serif !important;
+}
+
 
 
 .auth-container {
