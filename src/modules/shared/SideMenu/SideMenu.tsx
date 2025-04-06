@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
 import leftIcon from "../../../assets/Images/chevron-left.png";
 import rightIcon from "../../../assets/Images/chevron-right.png";
@@ -33,7 +33,7 @@ const SideMenu = () => {
 
   return (
     <>
-      <div className="sidebar-container">
+      <div className="sidebar-container vh-100 ">
         <Sidebar collapsed={isCollapsed}>
           <Menu>
             <div
@@ -54,23 +54,19 @@ const SideMenu = () => {
               active={activeItem === "home"}
               onClick={() => handleItemClick("home")}
             >
-              {" "}
               Home
             </MenuItem>
-
             {loginData?.userGroup !== "Employee" && (
               <MenuItem
-                component={<Link to="#" />}
+                component={<Link to="/dashboard/users" />}
                 title="users"
                 icon={<i className="fa-sharp fa-solid fa-users"></i>}
                 active={activeItem === "users"}
                 onClick={() => handleItemClick("users")}
               >
-                {" "}
                 Users
               </MenuItem>
             )}
-
             <MenuItem
               component={<Link to="#" />}
               title="projects"
@@ -78,7 +74,6 @@ const SideMenu = () => {
               active={activeItem === "projects"}
               onClick={() => handleItemClick("projects")}
             >
-              {" "}
               Projects
             </MenuItem>
 

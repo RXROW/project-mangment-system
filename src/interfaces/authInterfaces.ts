@@ -34,3 +34,6 @@ export interface ResetData {
   confirmPassword: string;
   seed: string;
 }
+
+
+

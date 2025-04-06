@@ -1,11 +1,13 @@
-// import { jwtDecode } from "";
 import { createContext, useContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { privateInstance } from "../services/apiConfig";
-import { PROJECTS_URLS, TASKS_URLS, USERS_URLS } from "../services/apiUrls";
+import { TASKS_URLS } from "../services/apiUrls";
+
+// Define the props for the AuthContextProvider
 type AuthContextProviderProps = {
   children: React.ReactNode;
 };
+
 // Define the structure of the decoded JWT
 interface DecodedToken {
   userName: string;
@@ -13,23 +15,68 @@ interface DecodedToken {
   userGroup: string;
   // Add other properties that you expect from the JWT
 }
-// Type for the context
+
+// Define the structure of a Task
+interface Task {
+  id: number;
+  title: string;
+  status: string;
+  description: string;
+  creationDate: string;
+  employee?: {
+    userName: string;
+  };
+}
+
+// Define the type for the context
 interface AuthContextType {
   loginData: DecodedToken | null;
   saveLoginData: () => void;
+  tasks: Task[];
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+  isLoading: boolean;
+  setSearchQueryTasks: React.Dispatch<React.SetStateAction<string>>;
+  StatsTasks: string;
+  setStatsTasks: React.Dispatch<React.SetStateAction<string>>;
+  alltasks: (
+    pageSize?: number,
+    pageNumber?: number,
+    title?: string,
+    status?: string
+  ) => Promise<void>;
+  userfortask: any[];
+  setUserfortask: React.Dispatch<React.SetStateAction<any[]>>;
+  paginationtask: {
+    currentPage: number;
+    totalNumberOfRecords: number;
+    totalNumberOfPages: number;
+  };
+  setpaginationtask: React.Dispatch<
+    React.SetStateAction<{
+      currentPage: number;
+      totalNumberOfRecords: number;
+      totalNumberOfPages: number;
+    }>
+  >;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
+
 export default function AuthContextProvider({
   children,
 }: AuthContextProviderProps) {
   const [loginData, setLoginData] = useState<DecodedToken | null>(null);
-  const [tasks, setTasks] = useState([]);
-  const [user, setUser] = useState([]);
-  const [project, setProject] = useState([]);
-  const [SearchQueryTasks, setSearchQueryTasks] = useState("");
-  const [StatsTasks, setStatsTasks] = useState("");
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [SearchQueryTasks, setSearchQueryTasks] = useState<string>("");
+  const [StatsTasks, setStatsTasks] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [userfortask, setUserfortask] = useState([]);
+  const [paginationtask, setpaginationtask] = useState({
+    currentPage: 1, // current page number
+    totalNumberOfRecords: 0, //all item in database
+    totalNumberOfPages: 0, // number of item in one page
+  });
+
   const saveLoginData = () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -41,64 +88,49 @@ export default function AuthContextProvider({
       setLoginData(null);
     }
   };
-  console.log(isLoading);
-  async function alltasks(title, status) {
+
+  async function alltasks(
+    pageSize?: number,
+    pageNumber?: number,
+    title?: string,
+    status?: string
+  ): Promise<void> {
     setIsLoading(true);
     try {
       const response = await privateInstance.get(TASKS_URLS.GET_ALL, {
         params: {
+          pageSize,
+          pageNumber,
           title,
           status,
         },
       });
-      setTasks(response?.data?.data);
+      setpaginationtask({
+        currentPage: response?.data?.pageNumber,
+        totalNumberOfRecords: response?.data?.totalNumberOfRecords,
+        totalNumberOfPages: response?.data?.totalNumberOfPages,
+      });
+      console.log(response);
+      setTasks(response?.data?.data || []);
     } catch (error) {
       console.log(error);
     } finally {
       setIsLoading(false);
     }
   }
-  async function alluser() {
-    setIsLoading(true);
-    try {
-      const response = await privateInstance.get(USERS_URLS.GET_ALL_USERS);
-      setUser(response?.data?.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-  async function allproject() {
-    setIsLoading(true);
-    try {
-      const response = await privateInstance.get(
-        PROJECTS_URLS.GET_ALL_PROJECTS
-      );
-      setProject(response?.data?.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
+  console.log(paginationtask, "paginationtask");
+
   useEffect(() => {
-    alltasks(SearchQueryTasks, StatsTasks);
-  }, [SearchQueryTasks, StatsTasks]);
-  useEffect(() => {
-    alluser();
-  }, []);
-  useEffect(() => {
-    allproject();
-  }, []);
+    alltasks(4, paginationtask.currentPage, SearchQueryTasks, StatsTasks);
+  }, [paginationtask.currentPage, SearchQueryTasks, StatsTasks]);
+
   useEffect(() => {
     if (localStorage.getItem("token")) {
       saveLoginData();
     }
   }, []);
-  console.log(user);
-  console.log(project);
-  console.log(SearchQueryTasks);
+  console.log(userfortask, "userfortask");
+  console.log(tasks, "tasks");
   return (
     <AuthContext.Provider
       value={{
@@ -110,8 +142,11 @@ export default function AuthContextProvider({
         setSearchQueryTasks,
         StatsTasks,
         setStatsTasks,
-        project,
-        user,
+        alltasks,
+        userfortask,
+        setUserfortask,
+        paginationtask,
+        setpaginationtask,
       }}
     >
       {children}

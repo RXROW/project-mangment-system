@@ -3,7 +3,6 @@
 export const BASE_URL = "https://upskilling-egypt.com:3003/api/v1";
 export const IMAGE_URL = "https://upskilling-egypt.com:3003/";
 
-
 //* USER AUTHENTICATION
 export const AUTH_URLS = {
   LOGIN: `Users/Login`,
@@ -22,6 +21,7 @@ const TASKS_URLS = {
   GET_TASK: (id: number) => `/Task/${id}`,
   EDIT_TASK: (id: number) => `/Task/${id}`,
   DELETE_TASK: (id: number) => `/Task/${id}`,
+  UPDATE_TASK: (id: number) => `/Task/${id}`,
   CHANGE_STATUS: (id: number) => `/Task/${id}/change-status`,
   GET_ASSIGNED_TASKS: `/Task`,
 };
@@ -46,7 +46,7 @@ export const PROJECTS_URLS = {
   ADD_PROJECT: `/Project`,
   GET_PROJECT: (id: number) => `Project/${id}`,
   EDIT_PROJECT: (id: number) => `/Project/${id}`,
-  GET_ALL_PROJECTS: `/Project/`
+  GET_ALL_PROJECTS: `/Project/`,
 };
 
 export { TASKS_URLS, USERS_URLS };

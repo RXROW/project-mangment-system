@@ -14,6 +14,7 @@ import MasterLayout from "./modules/shared/MasterLayout/MasterLayout";
 import ProtectedRoute from "./modules/shared/ProtectedRoute/ProtectedRoute";
 import Tasklist from "./modules/Task/Tasklist";
 import Taskdata from "./modules/Task/Taskdata";
+import UserList from "./modules/users/userList/UserList";
 
 function App() {
   const routes = createBrowserRouter([
@@ -44,6 +45,8 @@ function App() {
         { path: "dashboard", element: <Dashboard /> },
         { path: "tasklist", element: <Tasklist /> },
         { path: "tasklist/newtask", element: <Taskdata /> },
+        { path: "tasklist/:taskId", element: <Taskdata /> },
+        { path: "users", element: <UserList /> },
       ],
     },
   ]);
