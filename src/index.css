@@ -132,7 +132,7 @@ header{
   background-color: #000;
 }
 .sidebar-container .ps-menu-root {
-  height: calc(100vh - 55px);
+  height: 100dvh;
   background-color: #0E382F;
   padding-top: 50px;
 }
@@ -182,15 +182,23 @@ background-color: #EF9B284D;
 color: rgba(239, 155, 40, 1) !important;
 }
 
+.sidebar-container.vh-100 {
+  min-height: 100dvh !important;
+  background-color: #0E382F !important;
+}
 /*///////////////////////////SideBar//////////////////////////*/
 .placeholder-custom,
 .placeholder-custom::placeholder {
   color: white !important;
   opacity: 0.7 !important;
 }
-input:-webkit-autofill {
-  box-shadow: 0 0 0px 1000px #2d554e inset !important;
-  color: #fff !important;
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  -webkit-text-fill-color: #EF9B28 !important;
+  transition: background-color 5000s ease-in-out 0s;
   background-color: transparent !important;
 }
 input[type="password"]::-webkit-credentials-auto-fill-button,

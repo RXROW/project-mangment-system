@@ -51,7 +51,7 @@ const SideMenu = () => {
               </MenuItem>
             )}
 
-            <MenuItem component={<Link to="#" />} title="projects" icon={<i className="fa-solid fa-chart-column"></i>}
+            <MenuItem component={<Link to="projects" />} title="projects" icon={<i className="fa-solid fa-chart-column"></i>}
               active={activeItem === 'projects'} onClick={() => handleItemClick('projects')}> Projects 
             </MenuItem>
 
