@@ -13,13 +13,13 @@ const MasterLayout = () => {
           <div className="sidebar h-full ">
             <SideMenu />
           </div>
-          <div className="content overflow-hidden  w-100  ">
+          <div className="content overflow-hidden bg-light w-100  ">
             <Outlet />
           </div>
         </div>
       </div>
     </>
-  );
+  )
 };
 
 export default MasterLayout;
