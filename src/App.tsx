@@ -15,25 +15,27 @@ import ProtectedRoute from "./modules/shared/ProtectedRoute/ProtectedRoute";
 import Tasklist from "./modules/Task/Tasklist";
 import Taskdata from "./modules/Task/Taskdata";
 import UserList from "./modules/users/userList/UserList";
+import Projects from "./modules/Projects/Projects";
+import ProjectForm from "./modules/Projects/ProjectForm";
 
 function App() {
   const routes = createBrowserRouter([
     {
-      path: "",
+      path: '',
       element: <AuthLayout />,
       errorElement: <NotFound />,
       children: [
         { index: true, element: <Login /> },
-        { path: "login", element: <Login /> },
-        { path: "register", element: <Registration /> },
-        { path: "verify-user", element: <Verification /> },
-        { path: "forget-password", element: <ForgetPassword /> },
-        { path: "reset-password", element: <ResetPassword /> },
-        { path: "change-password", element: <ChangePassword /> },
+        { path: 'login', element: <Login /> },
+        { path: 'register', element: <Registration /> },
+        { path: 'verify-user', element: <Verification /> },
+        { path: 'forget-password', element: <ForgetPassword /> },
+        { path: 'reset-password', element: <ResetPassword /> },
+        { path: 'change-password', element: <ChangePassword /> },
       ],
     },
     {
-      path: "/dashboard",
+      path: '/dashboard',
       element: (
         <ProtectedRoute>
           <MasterLayout />
@@ -47,9 +49,12 @@ function App() {
         { path: "tasklist/newtask", element: <Taskdata /> },
         { path: "tasklist/:taskId", element: <Taskdata /> },
         { path: "users", element: <UserList /> },
+        { path: 'projects', element: <Projects /> },
+        { path: 'projects/new-project', element: <ProjectForm /> },
+        { path: 'projects/:projectId', element: <ProjectForm /> },
       ],
     },
-  ]);
+  ])
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState,useRef } from "react";
 import { jwtDecode } from "jwt-decode";
 import { privateInstance } from "../services/apiConfig";
 import { TASKS_URLS } from "../services/apiUrls";
@@ -13,7 +13,6 @@ interface DecodedToken {
   userName: string;
   userEmail: string;
   userGroup: string;
-  // Add other properties that you expect from the JWT
 }
 
 // Define the structure of a Task
@@ -60,6 +59,12 @@ interface AuthContextType {
   >;
 }
 
+interface AuthContextType {
+  loginData: DecodedToken | null;
+  saveLoginData: () => void;
+  logout: () => void;
+}
+
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export default function AuthContextProvider({
@@ -76,7 +81,16 @@ export default function AuthContextProvider({
     totalNumberOfRecords: 0, //all item in database
     totalNumberOfPages: 0, // number of item in one page
   });
+export default function AuthContextProvider({ children }: AuthContextProviderProps) {
+  const [loginData, setLoginData] = useState<DecodedToken | null>(null);
+  const lastTokenRef = useRef<string | null>(localStorage.getItem("token"));
 
+  const saveLoginData = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setLoginData(null);
+      return;
+    }
   const saveLoginData = () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -149,18 +163,43 @@ export default function AuthContextProvider({
         setpaginationtask,
       }}
     >
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    setLoginData(null);
+  };
+
+  useEffect(() => {
+    saveLoginData(); 
+    const checkTokenChange = () => {
+      const currentToken = localStorage.getItem("token");
+      if (currentToken !== lastTokenRef.current) {
+        lastTokenRef.current = currentToken;
+        saveLoginData();
+      }
+    };
+
+    const interval = setInterval(checkTokenChange, 100); 
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <AuthContext.Provider value={{ loginData, saveLoginData, logout }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-// Custom hook to use the auth context
 export function useAuthContext() {
   const authContext = useContext(AuthContext);
   if (authContext === null) {
     throw new Error(
       "useAuthContext must be used within an AuthContextProvider"
     );
+
   }
   return authContext;
 }

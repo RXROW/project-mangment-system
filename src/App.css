@@ -40,3 +40,15 @@
 .read-the-docs {
   color: #888;
 } */
+
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.bg-custom-green{
+  background-color: #315951E5;
+}
+
+.bg-custom-warning{
+  background-color: #EF9B28;
+}

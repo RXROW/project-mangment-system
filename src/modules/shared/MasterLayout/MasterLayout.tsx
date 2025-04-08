@@ -19,7 +19,7 @@ const MasterLayout = () => {
         </div>
       </div>
     </>
-  );
+  )
 };
 
 export default MasterLayout;
