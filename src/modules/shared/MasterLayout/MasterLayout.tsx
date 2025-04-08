@@ -10,10 +10,10 @@ const MasterLayout = () => {
           <Navbar />
         </div>
         <div className="content-container min-vh-100 d-flex">
-          <div className="sidebar h-full ">
+          <div className="sidebar vh-100">
             <SideMenu />
           </div>
-          <div className="content overflow-hidden bg-light w-100  ">
+          <div className="content overflow-auto w-100 vh-100 bg-body-secondary">
             <Outlet />
           </div>
         </div>

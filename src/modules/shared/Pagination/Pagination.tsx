@@ -43,30 +43,33 @@ const Pagination: React.FC<paginationInfo> = ({
                 className="paginationDropDownStyle"
                 id="dropdown-basic"
               >
-                {pageNumber} {totalNumberOfPages.length < 2 ? '' : <i className="fa-solid fa-chevron-down"></i>}
-
+                {pageNumber}{" "}
+                {totalNumberOfPages.length < 2 ? (
+                  ""
+                ) : (
+                  <i className="fa-solid fa-chevron-down"></i>
+                )}
               </Dropdown.Toggle>
 
-              {totalNumberOfPages.length < 2 ? '' : <Dropdown.Menu className="dropDownMenuStyle">
-
-                {totalNumberOfPages?.map((page) => (
-
-                  <Dropdown.Item
-                    key={page}
-
-                    onClick={() =>
-                      paginatedListFunction({
-                        pageNumber: page,
-                        pageSize: from == "users" ? 20 : 5,
-                      })
-                    }
-                  >
-
-                    {page}
-
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>}
+              {totalNumberOfPages.length < 2 ? (
+                ""
+              ) : (
+                <Dropdown.Menu className="dropDownMenuStyle">
+                  {totalNumberOfPages?.map((page) => (
+                    <Dropdown.Item
+                      key={page}
+                      onClick={() =>
+                        paginatedListFunction({
+                          pageNumber: page,
+                          pageSize: from == "users" ? 20 : 5,
+                        })
+                      }
+                    >
+                      {page}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              )}
             </Dropdown>
 
             <span> of {numOfRecords} Results</span>
@@ -76,9 +79,10 @@ const Pagination: React.FC<paginationInfo> = ({
               <span className="mx-2">of {totalNumberOfPages?.length}</span>
             </div>
 
-
-            {
-              numOfRecords < 10 ? '' : <>
+            {numOfRecords < 10 ? (
+              ""
+            ) : (
+              <>
                 <li className="page-item">
                   <a
                     className={
@@ -111,8 +115,7 @@ const Pagination: React.FC<paginationInfo> = ({
                   </a>
                 </li>
               </>
-            }
-
+            )}
           </ul>
         </nav>
       </div>

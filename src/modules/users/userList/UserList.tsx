@@ -7,9 +7,8 @@ import { USERS_URLS } from "../../../services/apiUrls";
 import Pagination from "../../shared/Pagination/Pagination";
 import NoData from "../../shared/NoData/NoData";
 import ViewDetailsModal from "../../shared/Modals/ViewDetailsModal";
-
 import Filtration from "../../shared/Filter/Filter";
-import { Dropdown, Button, Card, Spinner, Badge, Table } from "react-bootstrap";
+import { Button, Card, Spinner, Badge, Table } from "react-bootstrap";
 import { formatDate } from "../../shared/helperFunctions/formatDate";
 import {
   AxiosErrorResponse,
@@ -17,16 +16,18 @@ import {
   UserRequestParams,
   UsersListResponse,
 } from "../../../interfaces/userListInterfaces";
+import { useAuthContext } from "../../../context/AuthContext";
 
 const SortIcon: React.FC = () => (
   <span className="ms-1  fw-light ">
-    <i className="fa fa-sort text-white  " aria-hidden="true"></i>
+    <i className="fa fa-sort text-white" aria-hidden="true"></i>
   </span>
 );
 
 const UsersList: React.FC = () => {
   // State management
   const [usersList, setUsersList] = useState<User[]>([]);
+  const { setUserfortask } = useAuthContext();
   const [filteredUsers, setFilteredUsers] = useState<User[] | null>(null);
   const [pagination, setPagination] = useState({
     pages: [] as number[],
@@ -75,6 +76,7 @@ const UsersList: React.FC = () => {
           totalRecords: response.data.totalNumberOfRecords,
         });
         setUsersList(response.data.data);
+        setUserfortask(response.data.data);
       } catch (error) {
         const axiosError = error as AxiosError<AxiosErrorResponse>;
         toast.error(
@@ -84,9 +86,9 @@ const UsersList: React.FC = () => {
         setLoading(false);
       }
     },
-    [pageNum]
+    [pageNum, setUserfortask]
   );
-
+  console.log(usersList);
   // API request to filter users
   const getFilteredUsers = useCallback(async () => {
     setFilterLoading(true);

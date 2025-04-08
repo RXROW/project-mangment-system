@@ -12,6 +12,8 @@ import { Bounce, ToastContainer } from "react-toastify";
 import Dashboard from "./modules/dashboard/Dashboard";
 import MasterLayout from "./modules/shared/MasterLayout/MasterLayout";
 import ProtectedRoute from "./modules/shared/ProtectedRoute/ProtectedRoute";
+import Tasklist from "./modules/Task/Tasklist";
+import Taskdata from "./modules/Task/Taskdata";
 import UserList from "./modules/users/userList/UserList";
 import Projects from "./modules/Projects/Projects";
 import ProjectForm from "./modules/Projects/ProjectForm";
@@ -42,8 +44,11 @@ function App() {
       errorElement: <NotFound />,
       children: [
         { index: true, element: <Dashboard /> },
-        { path: 'dashboard', element: <Dashboard /> },
-        { path: 'users', element: <UserList /> },
+        { path: "dashboard", element: <Dashboard /> },
+        { path: "tasklist", element: <Tasklist /> },
+        { path: "tasklist/newtask", element: <Taskdata /> },
+        { path: "tasklist/:taskId", element: <Taskdata /> },
+        { path: "users", element: <UserList /> },
         { path: 'projects', element: <Projects /> },
         { path: 'projects/new-project', element: <ProjectForm /> },
         { path: 'projects/:projectId', element: <ProjectForm /> },
