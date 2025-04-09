@@ -1,17 +1,17 @@
-import { toast } from "react-toastify";
-import { useAuthContext } from "../../context/AuthContext";
-import { privateInstance } from "../../services/apiConfig";
-import { TASKS_URLS } from "../../services/apiUrls";
-import Button from "react-bootstrap/Button";
-import NoData from "../shared/NoData/NoData";
-import Spinner from "../shared/Spinner/Spinner";
-import { Link, useNavigate } from "react-router-dom";
-import { useState, ChangeEvent } from "react";
-import DeleteConfirmation from "../shared/DeleteConfirmation/DeleteConfirmation";
-import TaskDetailsModal from "./TaskDetailsModal";
-import Newpagination from "../shared/Newpagination/Newpagination";
-import HeaderTable from "../shared/HeaderTable/HeaderTable";
-import { CurrentTask } from "../../interfaces/taskinterface";
+import { toast } from 'react-toastify'
+import { useAuthContext } from '../../context/AuthContext'
+import { privateInstance } from '../../services/apiConfig'
+import { TASKS_URLS } from '../../services/apiUrls'
+import Button from 'react-bootstrap/Button'
+import NoData from '../shared/NoData/NoData'
+import Spinner from '../shared/Spinner/Spinner'
+import { Link, useNavigate } from 'react-router-dom'
+import { useState, ChangeEvent } from 'react'
+import DeleteConfirmation from '../shared/DeleteConfirmation/DeleteConfirmation'
+import TaskDetailsModal from './TaskDetailsModal'
+import Newpagination from '../shared/Newpagination/Newpagination'
+import HeaderTable from '../shared/HeaderTable/HeaderTable'
+import { CurrentTask } from '../../interfaces/taskinterface'
 // Define types for task and props
 
 function Tasklist() {
@@ -23,44 +23,44 @@ function Tasklist() {
     alltasks,
     paginationtask,
     setpaginationtask,
-  } = useAuthContext();
+  } = useAuthContext()
   const { currentPage, totalNumberOfRecords, totalNumberOfPages } =
-    paginationtask;
+    paginationtask
 
-  console.log(currentPage, totalNumberOfRecords, totalNumberOfPages);
-  const [modalShow, setModalShow] = useState<boolean>(false);
-  const [modalShowdetails, setModalShowdetails] = useState<boolean>(false);
-  const [currenttask, setcurrenttask] = useState<CurrentTask | null>(null);
-  const [taskId, settaskId] = useState<number>(0);
-  const navigate = useNavigate();
+  console.log(currentPage, totalNumberOfRecords, totalNumberOfPages)
+  const [modalShow, setModalShow] = useState<boolean>(false)
+  const [modalShowdetails, setModalShowdetails] = useState<boolean>(false)
+  const [currenttask, setcurrenttask] = useState<CurrentTask | null>(null)
+  const [taskId, settaskId] = useState<number>(0)
+  const navigate = useNavigate()
   const handleSearchBarTasks = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchQueryTasks(e.target.value);
-  };
+    setSearchQueryTasks(e.target.value)
+  }
   const handleSelectTasks = (e: ChangeEvent<HTMLSelectElement>) => {
-    setStatsTasks(e.target.value);
-  };
+    setStatsTasks(e.target.value)
+  }
 
   const handleAddTask = () => {
-    navigate("/dashboard/tasklist/newtask");
-  };
+    navigate('/dashboard/tasks/newtask')
+  }
 
   const deletettask = async (id: number) => {
     try {
-      await privateInstance.delete(TASKS_URLS.DELETE_TASK(id));
-      toast.success("The task has been deleted successfully");
-      alltasks();
+      await privateInstance.delete(TASKS_URLS.DELETE_TASK(id))
+      toast.success('The task has been deleted successfully')
+      alltasks()
     } catch (error) {
-      console.log(error || "Failed to delete task");
+      console.log(error || 'Failed to delete task')
     }
-  };
+  }
   const handleDeletetask = (id: number) => {
-    setModalShow(true);
-    settaskId(id);
-  };
+    setModalShow(true)
+    settaskId(id)
+  }
   const GetCurrentTask = (currentTask: CurrentTask) => {
-    setcurrenttask(currentTask);
-    setModalShowdetails(true);
-  };
+    setcurrenttask(currentTask)
+    setModalShowdetails(true)
+  }
   return (
     <>
       <HeaderTable
@@ -73,7 +73,7 @@ function Tasklist() {
           <div className="search-bar d-flex align-items-center">
             <div
               className="position-relative fs-6"
-              style={{ left: "40px", marginTop: "-2px" }}
+              style={{ left: '40px', marginTop: '-2px' }}
             >
               <i className="fa-solid fa-magnifying-glass text-secondary"></i>
             </div>
@@ -90,16 +90,16 @@ function Tasklist() {
               aria-label="Default select example"
               onChange={handleSelectTasks}
             >
-              <option selected value={"ToDo"} key={0}>
+              <option selected value={'ToDo'} key={0}>
                 Filter
               </option>
-              <option key={1} value={"ToDo"}>
+              <option key={1} value={'ToDo'}>
                 To Do
               </option>
-              <option key={2} value={"InProgress"}>
+              <option key={2} value={'InProgress'}>
                 In Progress
               </option>
-              <option key={3} value={"Done"}>
+              <option key={3} value={'Done'}>
                 Done
               </option>
             </select>
@@ -161,7 +161,7 @@ function Tasklist() {
                           </a>
                         </li>
                         <Link
-                          to={`/dashboard/tasklist/${task?.id}`}
+                          to={`/dashboard/tasks/${task?.id}`}
                           className="text-decoration-none dropdown-item"
                         >
                           <i className="mx-2 text-success fa-regular fa-pen-to-square"></i>
@@ -212,7 +212,7 @@ function Tasklist() {
         />
       </div>
     </>
-  );
+  )
 }
 
-export default Tasklist;
+export default Tasklist
