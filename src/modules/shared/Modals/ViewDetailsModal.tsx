@@ -14,7 +14,11 @@ const ViewDetailsModal: FC<ViewDetailsModalProps> = ({
     <Modal show={show} onHide={handleClose} centered size="lg">
       <Modal.Header closeButton>
         <Modal.Title>
-          {type === 'project' ? 'Project Details' : 'User Details'}
+          {type === 'project'
+            ? 'Project Details'
+            : type === 'task'
+            ? 'Task Details'
+            : 'User Details'}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -28,6 +32,8 @@ const ViewDetailsModal: FC<ViewDetailsModalProps> = ({
           </div>
         ) : type === 'project' ? (
           <ProjectDetails details={details} />
+        ) : type === 'task' ? (
+          <TaskDetails details={details} />
         ) : (
           <UserDetails details={details} />
         )}
@@ -125,7 +131,6 @@ const UserDetails = ({ details }: { details: any }) => {
     </div>
   )
 }
-
 // Project Details Component
 const ProjectDetails = ({ details }: { details: any }) => {
   return (
@@ -179,5 +184,32 @@ const ProjectDetails = ({ details }: { details: any }) => {
     </div>
   )
 }
-
+const TaskDetails = ({ details }: { details: any }) => {
+  return (
+    <>
+      {details ? (
+        <div>
+          <p>
+            <strong>Title:</strong> {details.title}
+          </p>
+          <p>
+            <strong>Description:</strong> {details.description}
+          </p>
+          <p>
+            <strong>Status:</strong> {details.status}
+          </p>
+          <p>
+            <strong>Assigned User:</strong> {details.employee?.userName}
+          </p>
+          <p>
+            <strong>Creation Date:</strong>
+            {new Date(details.creationDate).toLocaleString()}
+          </p>
+        </div>
+      ) : (
+        <p>No task selected.</p>
+      )}
+    </>
+  )
+}
 export default ViewDetailsModal

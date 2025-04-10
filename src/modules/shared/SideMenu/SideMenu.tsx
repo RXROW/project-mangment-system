@@ -2,13 +2,18 @@ import { useEffect, useState } from 'react'
 import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar'
 import leftIcon from '../../../assets/Images/chevron-left.png'
 import rightIcon from '../../../assets/Images/chevron-right.png'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuthContext } from '../../../context/AuthContext'
 
 const SideMenu = () => {
   const { loginData, logout } = useAuthContext()
   const [isCollapsed, setIsCollapsed] = useState(window.innerWidth < 768)
-  const [activeItem, setActiveItem] = useState('home')
+  const location = useLocation()
+  const [activeItem, setActiveItem] = useState(
+    location.pathname.split('/').pop()
+  )
+  console.log(activeItem)
+  console.log(location)
   const navigate = useNavigate()
   const handleItemClick = (itemName: string) => {
     setActiveItem(itemName)
@@ -51,8 +56,8 @@ const SideMenu = () => {
             component={<Link to="/dashboard" />}
             title="Home"
             icon={<i className="fa fa-home"></i>}
-            active={activeItem === 'home'}
-            onClick={() => handleItemClick('home')}
+            active={activeItem === 'dashboard'}
+            onClick={() => handleItemClick('dashboard')}
           >
             Home
           </MenuItem>
