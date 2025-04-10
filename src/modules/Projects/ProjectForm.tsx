@@ -5,6 +5,8 @@ import { PROJECTS_URLS } from '../../services/apiUrls'
 import { privateInstance } from '../../services/apiConfig'
 import { toast } from 'react-toastify'
 import { useEffect } from 'react'
+import HeaderTable from '../shared/HeaderTable/HeaderTable'
+import { useMoveBack } from '../../hooks/useMoveBack'
 
 export default function ProjectForm() {
   const {
@@ -19,7 +21,7 @@ export default function ProjectForm() {
   const newProject: boolean = !projectId
 
   console.log(projectId)
-
+  const goBack = useMoveBack()
   const onSubmit = async (data: AddNewProject) => {
     const parsedId = parseInt(projectId!, 10)
     try {
@@ -34,7 +36,7 @@ export default function ProjectForm() {
       newProject
         ? toast.success('Project added successfully')
         : toast.success('Project updated successfully')
-      navigate('/dashboard/projects')
+      goBack()
     } catch (error: any) {
       toast.error(error?.response?.data?.message)
     }
@@ -58,24 +60,12 @@ export default function ProjectForm() {
 
   return (
     <>
-      <div className="bg-white px-5 py-4">
-        <Link
-          to={'/dashboard/projects'}
-          className=""
-          style={{ textDecoration: 'none' }}
-        >
-          <i className="fas fa-arrow-left text-black"></i>
-          <button className="bg-transparent border-0 mb-3">
-            View All Projects
-          </button>
-        </Link>
-        {newProject ? (
-          <h2>Add a new Project</h2>
-        ) : (
-          <h2>Edit Project Details</h2>
-        )}
-      </div>
-
+      <HeaderTable
+        goBack={goBack}
+        type="update"
+        header={newProject ? 'Add a new Project ' : 'Edit Project Details'}
+        namebtn="View All Projects"
+      />
       <form className="py-4 px-5 mx-5">
         <div className="row table bg-white rounded-3 p-3 shadow-sm">
           <div className="col-md-12 p-3">
@@ -116,16 +106,16 @@ export default function ProjectForm() {
               </span>
             )}
           </div>
-          <div className="p-3 d-flex justify-content-between">
-            <Link
-              to={'/dashboard/projects'}
-              className="rounded-pill px-4 py-3 text-decoration-none text-black border border-3"
+          <div className="btn-container d-flex justify-content-between align-items-center border-1 border-top py-4">
+            <span
+              onClick={() => goBack()}
+              className="btn btn-outline-dark rounded-pill py-2 px-md-4"
             >
-             Cancel
-            </Link>
+              Cancel
+            </span>
             <button
               onClick={handleSubmit(onSubmit)}
-              className="bg-custom-warning rounded-pill px-4 py-3 border-0 text-white"
+              className="btn btn-warning rounded-pill py-2 px-md-4 text-white"
             >
               {isSubmitting ? (
                 <i className="fas fa-spin fa-spinner bg-transparent text-white"></i>

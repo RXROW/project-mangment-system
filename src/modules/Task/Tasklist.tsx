@@ -2,16 +2,18 @@ import { toast } from 'react-toastify'
 import { useAuthContext } from '../../context/AuthContext'
 import { privateInstance } from '../../services/apiConfig'
 import { TASKS_URLS } from '../../services/apiUrls'
-import Button from 'react-bootstrap/Button'
 import NoData from '../shared/NoData/NoData'
-import Spinner from '../shared/Spinner/Spinner'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useState, ChangeEvent } from 'react'
 import DeleteConfirmation from '../shared/DeleteConfirmation/DeleteConfirmation'
-import TaskDetailsModal from './TaskDetailsModal'
 import Newpagination from '../shared/Newpagination/Newpagination'
 import HeaderTable from '../shared/HeaderTable/HeaderTable'
 import { CurrentTask } from '../../interfaces/taskinterface'
+import ViewDetailsModal from '../shared/Modals/ViewDetailsModal'
+import ActionMenu from '../shared/ActionTable/ActionMenu'
+import TheadTable from '../shared/TheadTable/TheadTable/TheadTable'
+import Filtration from '../shared/Filter/Filter'
+import SpinnerTable from '../shared/Spinner/SpinnerTable'
 // Define types for task and props
 
 function Tasklist() {
@@ -37,16 +39,14 @@ function Tasklist() {
     setSearchQueryTasks(e.target.value)
   }
   const handleSelectTasks = (e: ChangeEvent<HTMLSelectElement>) => {
-    setStatsTasks(e.target.value)
+    setStatsTasks(e.target.value as 'ToDo' | 'InProgress' | 'Done')
   }
-
   const handleAddTask = () => {
     navigate('/dashboard/tasks/newtask')
   }
-
-  const deletettask = async (id: number) => {
+  const handleDeletetTaskApi = async () => {
     try {
-      await privateInstance.delete(TASKS_URLS.DELETE_TASK(id))
+      await privateInstance.delete(TASKS_URLS.DELETE_TASK(taskId))
       toast.success('The task has been deleted successfully')
       alltasks()
     } catch (error) {
@@ -56,6 +56,10 @@ function Tasklist() {
   const handleDeletetask = (id: number) => {
     setModalShow(true)
     settaskId(id)
+    console.log(id)
+  }
+  function handleEditTask(id: number) {
+    navigate(`/dashboard/tasks/${id}`)
   }
   const GetCurrentTask = (currentTask: CurrentTask) => {
     setcurrenttask(currentTask)
@@ -105,30 +109,19 @@ function Tasklist() {
             </select>
           </div>
         </div>
+        {/* <Filtration pageName="tasks" /> */}
+
         <div className="task-table">
           <table className="table table-striped table-hover text-center align-middle">
-            <thead className="table-secondary overflow-visible">
-              <tr>
-                <th scope="col" className="py-4">
-                  Title <i className="fa-solid fa-sort"></i>
-                </th>
-                <th scope="col" className="py-4">
-                  Status <i className="fa-solid fa-sort"></i>
-                </th>
-                <th scope="col" className="py-4">
-                  User <i className="fa-solid fa-sort"></i>
-                </th>
-                <th scope="col" className="py-4">
-                  Project <i className="fa-solid fa-sort"></i>
-                </th>
-                <th scope="col" className="py-4">
-                  Date Created <i className="fa-solid fa-sort"></i>
-                </th>
-                <th scope="col" className="py-4">
-                  Action <i className="fa-solid fa-sort"></i>
-                </th>
-              </tr>
-            </thead>
+            <TheadTable
+              colone="Title"
+              coltwo="Status"
+              colthree="User"
+              colfour="Project"
+              dateCreated="Date Created"
+              action="Action"
+              nametable="task"
+            />
             <tbody>
               {tasks?.length > 0 ? (
                 tasks?.map((task: CurrentTask) => (
@@ -140,51 +133,18 @@ function Tasklist() {
                     <td data-label="creationDate" className="text-wrap">
                       {new Date(task?.creationDate).toLocaleString()}
                     </td>
-                    <td>
-                      <button
-                        className="border-0 bg-transparent"
-                        type="button"
-                        id="dropdownMenuButton"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                      >
-                        <i className="fa-solid fa-ellipsis-vertical"></i>
-                      </button>
-                      <ul
-                        className="dropdown-menu"
-                        aria-labelledby="dropdownMenuButton"
-                      >
-                        <li role="button" onClick={() => GetCurrentTask(task)}>
-                          <a className="text-decoration-none dropdown-item">
-                            <i className="mx-2 text-success fa-regular fa-eye"></i>
-                            View
-                          </a>
-                        </li>
-                        <Link
-                          to={`/dashboard/tasks/${task?.id}`}
-                          className="text-decoration-none dropdown-item"
-                        >
-                          <i className="mx-2 text-success fa-regular fa-pen-to-square"></i>
-                          Edit
-                        </Link>
-                        <li>
-                          <Button
-                            variant="primary"
-                            className="dropdown-item"
-                            onClick={() => handleDeletetask(task?.id)}
-                          >
-                            <i className="mx-2 text-success fa-solid fa-trash-can"></i>
-                            Delete
-                          </Button>
-                        </li>
-                      </ul>
-                    </td>
+
+                    <ActionMenu
+                      onView={() => GetCurrentTask(task)}
+                      onEdit={() => handleEditTask(task.id)}
+                      onDelete={() => handleDeletetask(task.id)}
+                    />
                   </tr>
                 ))
               ) : (
                 <tr>
                   <td className="text-center" colSpan={7}>
-                    {isLoading ? <Spinner /> : <NoData />}
+                    {isLoading ? <SpinnerTable /> : <NoData />}
                   </td>
                 </tr>
               )}
@@ -199,18 +159,18 @@ function Tasklist() {
             totalNumberOfRecords={totalNumberOfRecords}
           />
         </div>
-        <DeleteConfirmation
-          show={modalShow}
-          onHide={() => setModalShow(false)}
-          id={taskId}
-          deletettask={deletettask}
-        />
-        <TaskDetailsModal
-          show={modalShowdetails}
-          onHide={() => setModalShowdetails(false)}
-          task={currenttask}
-        />
       </div>
+      <DeleteConfirmation
+        toggleShow={modalShow}
+        handleClose={() => setModalShow(false)}
+        deleteFunction={handleDeletetTaskApi}
+      />
+      <ViewDetailsModal
+        show={modalShowdetails}
+        handleClose={() => setModalShowdetails(false)}
+        details={currenttask}
+        type="task"
+      />
     </>
   )
 }

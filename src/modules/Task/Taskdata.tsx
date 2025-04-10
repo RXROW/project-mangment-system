@@ -1,26 +1,28 @@
-import { SubmitHandler, useForm } from "react-hook-form";
-import { useMoveBack } from "../../hooks/useMoveBack";
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { useMoveBack } from '../../hooks/useMoveBack'
 import {
+  projectfortask,
   RouteParams,
   TaskData,
   TaskResponse,
-} from "../../interfaces/taskinterface";
-import { TASKS_URLS } from "../../services/apiUrls";
-import { privateInstance } from "../../services/apiConfig";
-import { toast } from "react-toastify";
-import { useAuthContext } from "../../context/AuthContext";
-import { useParams } from "react-router-dom";
-import { JSX, useEffect, useState } from "react";
+} from '../../interfaces/taskinterface'
+import { TASKS_URLS } from '../../services/apiUrls'
+import { privateInstance } from '../../services/apiConfig'
+import { toast } from 'react-toastify'
+import { useAuthContext } from '../../context/AuthContext'
+import { useParams } from 'react-router-dom'
+import { JSX, useEffect, useState } from 'react'
+import HeaderTable from '../shared/HeaderTable/HeaderTable'
 export default function Taskdata(): JSX.Element {
-  const { alltasks, userfortask } = useAuthContext();
-  const [isFormEdited, setIsFormEdited] = useState<boolean>(false);
-  const params = useParams<RouteParams>();
-  const taskId = params.taskId;
-  const goBack = useMoveBack();
+  const { alltasks, userfortask, projectfortask } = useAuthContext()
+  const [isFormEdited, setIsFormEdited] = useState<boolean>(false)
+  const params = useParams<RouteParams>()
+  const taskId = params.taskId
+  const goBack = useMoveBack()
 
   const handleInputChange = (): void => {
-    setIsFormEdited(true);
-  };
+    setIsFormEdited(true)
+  }
 
   const {
     register,
@@ -28,64 +30,61 @@ export default function Taskdata(): JSX.Element {
     setValue,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<TaskData>();
+  } = useForm<TaskData>()
 
   const onSubmit: SubmitHandler<TaskData> = async (
     data: TaskData
   ): Promise<void> => {
     try {
       if (taskId) {
-        await privateInstance.put(TASKS_URLS.UPDATE_TASK(taskId), data);
-        toast.success("Task Updated Successfully");
+        await privateInstance.put(TASKS_URLS.UPDATE_TASK(taskId), data)
+        toast.success('Task Updated Successfully')
       } else {
-        await privateInstance.post(TASKS_URLS.ADD_TASK, data);
-        toast.success("Task Added Successfully");
+        await privateInstance.post(TASKS_URLS.ADD_TASK, data)
+        toast.success('Task Added Successfully')
       }
-      reset();
-      alltasks();
-      goBack();
+      reset()
+      alltasks()
+      goBack()
     } catch (error) {
-      console.error(error);
-      toast.error("Something Wrong");
+      console.error(error)
+      toast.error(error.toString() || 'Failed to add task')
     }
-  };
+  }
 
   const getTaskById = async (): Promise<void> => {
     try {
-      if (!taskId) return;
+      if (!taskId) return
       const res = await privateInstance.get<TaskResponse>(
         TASKS_URLS.GET_TASK(taskId)
-      );
-      setValue("title", res?.data?.title);
-      setValue("description", res?.data?.description);
-      setValue("employeeId", res?.data?.employee?.id);
+      )
+      setValue('title', res?.data?.title)
+      setValue('description', res?.data?.description)
+      setValue('employeeId', res?.data?.employee?.id)
     } catch (error) {
-      console.error(error || "Failed to get data");
+      console.error(error || 'Failed to get data')
     }
-  };
-
+  }
   useEffect(() => {
     if (taskId) {
-      getTaskById();
+      getTaskById()
     }
-  }, [taskId]);
+  }, [taskId])
 
   return (
     <div>
-      <div className="bg-white mt-2 d-flex justify-content-between align-items-center p-4 shadow-sm ">
-        <div className=" ps-2 ps-md-5 py-1 item">
-          <div role="button" onClick={goBack}>
-            <i className="fa-solid fa-angle-left pe-2 "></i>View All Tasks
-          </div>
-          <h3>Add a New Task</h3>
-        </div>
-      </div>
+      <HeaderTable
+        goBack={goBack}
+        type="update"
+        header={taskId ? 'Update Task ' : 'Add a New Task'}
+        namebtn="View All Tasks"
+      />
       <div className="container w-75 bg-white my-5 p-3 rounded-4 shadow-sm">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
             <label className="my-2 ms-2">Title</label>
             <input
-              {...register("title", { required: "Title is required" })}
+              {...register('title', { required: 'Title is required' })}
               type="text"
               className="form-control rounded-4 my-2"
               placeholder="Name"
@@ -101,8 +100,8 @@ export default function Taskdata(): JSX.Element {
           <div className="my-4">
             <label className="my-2 ms-2">Description</label>
             <textarea
-              {...register("description", {
-                required: "Description is required",
+              {...register('description', {
+                required: 'Description is required',
               })}
               className="form-control rounded-4 my-2"
               placeholder="Description"
@@ -119,7 +118,7 @@ export default function Taskdata(): JSX.Element {
                 <label className="my-2 ms-2">User</label>
                 <select
                   className="form-control rounded-4 my-2"
-                  {...register("employeeId", { required: "User is required" })}
+                  {...register('employeeId', { required: 'User is required' })}
                   name="employeeId"
                   onChange={handleInputChange}
                 >
@@ -145,14 +144,23 @@ export default function Taskdata(): JSX.Element {
                 <div className="mb-4">
                   <label className="my-2 ms-2">Project</label>
                   <select
-                    {...register("projectId", {
-                      required: "Project is required",
+                    {...register('projectId', {
+                      required: 'Project is required',
                     })}
                     className="form-control rounded-4 my-2"
                     name="projectId"
                   >
-                    <option value="">Project</option>
-                    <option value="1380">fd</option>
+                    {projectfortask?.length === 0 && (
+                      <option value="">No Project Available</option>
+                    )}
+                    {projectfortask?.length > 0 && (
+                      <option value="">Select Project</option>
+                    )}
+                    {projectfortask?.map((project: projectfortask) => (
+                      <option key={project.id} value={project.id}>
+                        {project.title}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 {errors.projectId && (
@@ -178,14 +186,14 @@ export default function Taskdata(): JSX.Element {
               {isSubmitting ? (
                 <i className="fa-solid fa-spinner fa-spin"></i>
               ) : taskId ? (
-                "Update Task"
+                'Update Task'
               ) : (
-                "Add Task"
+                'Add Task'
               )}
             </button>
           </div>
         </form>
       </div>
     </div>
-  );
+  )
 }

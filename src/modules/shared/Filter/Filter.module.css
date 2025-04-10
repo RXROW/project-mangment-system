@@ -7,14 +7,13 @@
   --filter-input-bg: #ffffff;
 }
 
- 
 .filtration-container {
   background-color: var(--filter-bg);
 }
 .input {
   border-top-right-radius: 30px;
   border-bottom-right-radius: 30px;
-  border-color: var(--label-color) !important;
+  /* border-color: var(--label-color) !important; */
   color: var(--label-color) !important;
   background-color: var(--filter-input-bg);
 }
@@ -27,8 +26,8 @@
 .icon {
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
-  border-color: var(--label-color) !important;
-  background-color: var(--filter-input-bg) !important;
+  /* border-color: var(--label-color) !important; */
+  /* background-color: var(--filter-input-bg) !important; */
   color: var(--label-color) !important;
   fill: var(--label-color) !important;
 }

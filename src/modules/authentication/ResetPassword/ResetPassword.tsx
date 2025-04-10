@@ -1,18 +1,18 @@
-import { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import {
   emailValidation,
   passwordValidation,
-} from "../../../services/validation";
-import { publicInstance } from "../../../services/apiConfig";
-import { AUTH_URLS } from "../../../services/apiUrls";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { ResetData } from "../../../interfaces/authInterfaces";
-import PasswordToggle from "../../../hooks/PasswordToggle";
-import Button from "../../shared/Button/Button";
-import TitleAuth from "../../shared/TitleAuth/TitleAuth";
+} from '../../../services/validation'
+import { publicInstance } from '../../../services/apiConfig'
+import { AUTH_URLS } from '../../../services/apiUrls'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { ResetData } from '../../../interfaces/authInterfaces'
+import PasswordToggle from '../../../hooks/PasswordToggle'
+import Button from '../../shared/Button/Button'
+import TitleAuth from '../../shared/TitleAuth/TitleAuth'
 // import { ResetPasswordData } from '../Interfaces/Interfaces';
 
 const ResetPassword = () => {
@@ -20,22 +20,19 @@ const ResetPassword = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<ResetData>();
-  const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
+  } = useForm<ResetData>()
+  const navigate = useNavigate()
+  const [showPassword, setShowPassword] = useState(true)
+  const [showNewPassword, setShowNewPassword] = useState(true)
   const onSubmit: SubmitHandler<ResetData> = async (data) => {
     try {
-      const response = await publicInstance.post(
-        AUTH_URLS.RESET_PASSWORD,
-        data
-      );
-      navigate("/login");
-      toast.success(" Change Password Successfully");
+      const response = await publicInstance.post(AUTH_URLS.RESET_PASSWORD, data)
+      navigate('/login')
+      toast.success(' Change Password Successfully')
     } catch (error) {
-      toast.error(error?.response?.data?.message);
+      toast.error(error?.response?.data?.message)
     }
-  };
+  }
 
   return (
     <div className="col-12 auth-bg p-5 ">
@@ -47,7 +44,7 @@ const ResetPassword = () => {
             E-mail
           </label>
           <input
-            {...register("email", emailValidation)}
+            {...register('email', emailValidation)}
             type="email"
             className="form-control bg-transparent border-0 border-bottom rounded-0 px-2 pt-4 placeholder-custom text-white"
             placeholder="Enter your Email"
@@ -64,7 +61,7 @@ const ResetPassword = () => {
             OTP Verification
           </label>
           <input
-            {...register("seed", { required: "OTP is required" })}
+            {...register('seed', { required: 'OTP is required' })}
             type="text"
             className="form-control bg-transparent border-0 border-bottom rounded-0 px-2 pt-4 placeholder-custom text-white"
             placeholder="Enter Verification"
@@ -81,8 +78,8 @@ const ResetPassword = () => {
             New Password
           </label>
           <input
-            {...register("password", passwordValidation)}
-            type={showPassword ? "text" : "password"}
+            {...register('password', passwordValidation)}
+            type={showPassword ? 'text' : 'password'}
             className="form-control bg-transparent border-0 border-bottom rounded-0 px-2 pt-4 placeholder-custom text-white"
             placeholder="Enter Your New Password"
           />
@@ -106,8 +103,8 @@ const ResetPassword = () => {
             Confirm Password
           </label>
           <input
-            {...register("confirmPassword", passwordValidation)}
-            type={showNewPassword ? "text" : "password"}
+            {...register('confirmPassword', passwordValidation)}
+            type={showNewPassword ? 'text' : 'password'}
             className="form-control bg-transparent border-0 border-bottom rounded-0 px-2 pt-4 placeholder-custom text-white"
             placeholder="Confirm New Password"
           />
@@ -127,7 +124,7 @@ const ResetPassword = () => {
         <Button isSubmitting={isSubmitting}>save</Button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default ResetPassword;
+export default ResetPassword

@@ -2,6 +2,14 @@ import { createContext, useContext, useEffect, useState, useRef } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { privateInstance } from '../services/apiConfig'
 import { TASKS_URLS } from '../services/apiUrls'
+import {
+  CurrentTask,
+  Employee,
+  PaginationTask,
+  projectfortask,
+  TaskContextState,
+  TaskStatus,
+} from '../interfaces/taskinterface'
 
 // Define the props for the AuthContextProvider
 type AuthContextProviderProps = {
@@ -16,53 +24,13 @@ interface DecodedToken {
 }
 
 // Define the structure of a Task
-interface Task {
-  id: number
-  title: string
-  status: string
-  description: string
-  creationDate: string
-  employee?: {
-    userName: string
-  }
-}
-
-// Define the type for the context
-interface AuthContextType {
-  loginData: DecodedToken | null
-  saveLoginData: () => void
-  tasks: Task[]
-  setTasks: React.Dispatch<React.SetStateAction<Task[]>>
-  isLoading: boolean
-  setSearchQueryTasks: React.Dispatch<React.SetStateAction<string>>
-  StatsTasks: string
-  setStatsTasks: React.Dispatch<React.SetStateAction<string>>
-  alltasks: (
-    pageSize?: number,
-    pageNumber?: number,
-    title?: string,
-    status?: string
-  ) => Promise<void>
-  userfortask: any[]
-  setUserfortask: React.Dispatch<React.SetStateAction<any[]>>
-  paginationtask: {
-    currentPage: number
-    totalNumberOfRecords: number
-    totalNumberOfPages: number
-  }
-  setpaginationtask: React.Dispatch<
-    React.SetStateAction<{
-      currentPage: number
-      totalNumberOfRecords: number
-      totalNumberOfPages: number
-    }>
-  >
-}
-
-interface AuthContextType {
+interface AuthContextType extends TaskContextState {
   loginData: DecodedToken | null
   saveLoginData: () => void
   logout: () => void
+  projectfortask: projectfortask[]
+  setprojectfortask: React.Dispatch<React.SetStateAction<projectfortask[]>>
+  isLoading: boolean
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null)
@@ -71,16 +39,18 @@ export default function AuthContextProvider({
   children,
 }: AuthContextProviderProps) {
   const [loginData, setLoginData] = useState<DecodedToken | null>(null)
-  const [tasks, setTasks] = useState<Task[]>([])
   const [SearchQueryTasks, setSearchQueryTasks] = useState<string>('')
-  const [StatsTasks, setStatsTasks] = useState<string>('')
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [userfortask, setUserfortask] = useState([])
-  const [paginationtask, setpaginationtask] = useState({
-    currentPage: 1, // current page number
-    totalNumberOfRecords: 0, //all item in database
-    totalNumberOfPages: 0, // number of item in one page
+  const [tasks, setTasks] = useState<CurrentTask[]>([])
+  const [userfortask, setUserfortask] = useState<Employee[]>([])
+  const [paginationtask, setpaginationtask] = useState<PaginationTask>({
+    currentPage: 1,
+    totalNumberOfRecords: 0,
+    totalNumberOfPages: 0,
   })
+  // Auth State
+  const [StatsTasks, setStatsTasks] = useState<TaskStatus>('ToDo')
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [projectfortask, setprojectfortask] = useState<projectfortask[]>([])
   const lastTokenRef = useRef<string | null>(localStorage.getItem('token'))
   const saveLoginData = () => {
     const token = localStorage.getItem('token')
@@ -125,7 +95,6 @@ export default function AuthContextProvider({
   useEffect(() => {
     alltasks(4, paginationtask.currentPage, SearchQueryTasks, StatsTasks)
   }, [paginationtask.currentPage, SearchQueryTasks, StatsTasks])
-
   useEffect(() => {
     if (localStorage.getItem('token')) {
       saveLoginData()
@@ -167,6 +136,8 @@ export default function AuthContextProvider({
         paginationtask,
         setpaginationtask,
         logout,
+        projectfortask,
+        setprojectfortask,
       }}
     >
       {children}

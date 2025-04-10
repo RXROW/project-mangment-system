@@ -1,10 +1,10 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState } from 'react'
 
 interface NewpaginationProps {
-  totalNumberOfPages: number;
-  totalNumberOfRecords: number;
-  currentPage: number;
-  setpagination: (value: any) => void;
+  totalNumberOfPages: number
+  totalNumberOfRecords: number
+  currentPage: number
+  setpagination: (value: any) => void
 }
 function Newpagination({
   totalNumberOfPages,
@@ -12,38 +12,38 @@ function Newpagination({
   currentPage,
   setpagination,
 }: NewpaginationProps) {
-  const [selectedOption, setSelectedOption] = useState(1);
+  const [selectedOption, setSelectedOption] = useState(currentPage)
   const arrayoftotalNumberOfPages = Array.from(
     { length: totalNumberOfPages },
     (_, i) => i + 1
-  );
+  )
   const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOption(Number(e.target.value));
+    setSelectedOption(Number(e.target.value))
     setpagination((prev: { currentPage: number }) => ({
       ...prev,
       currentPage: Number(e.target.value),
-    }));
-  };
+    }))
+  }
   const handleNextpages = () => {
     if (currentPage < totalNumberOfPages) {
-      const nextPage = currentPage + 1;
-      setSelectedOption(nextPage);
+      const nextPage = currentPage + 1
+      setSelectedOption(nextPage)
       setpagination((prev: { currentPage: number }) => ({
         ...prev,
         currentPage: nextPage,
-      }));
+      }))
     }
-  };
+  }
   const handlePrevpages = () => {
     if (currentPage > 1) {
-      const prevPage = currentPage - 1;
-      setSelectedOption(prevPage);
+      const prevPage = currentPage - 1
+      setSelectedOption(prevPage)
       setpagination((prev: { currentPage: number }) => ({
         ...prev,
         currentPage: prevPage,
-      }));
+      }))
     }
-  };
+  }
 
   return (
     <div className="d-flex justify-content-end w-100 border-2 border-top bg-white p-3 rounded-bottom-4 shadow-sm">
@@ -84,6 +84,6 @@ function Newpagination({
         </div>
       </div>
     </div>
-  );
+  )
 }
-export default Newpagination;
+export default Newpagination
