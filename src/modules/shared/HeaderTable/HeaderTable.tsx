@@ -1,3 +1,5 @@
+import { useAuthContext } from "../../../context/AuthContext"
+
 interface HeaderTableProps {
   handleAdd?: () => void
   header?: string
@@ -6,6 +8,7 @@ interface HeaderTableProps {
   goBack?: () => void
 }
 
+
 const HeaderTable: React.FC<HeaderTableProps> = ({
   handleAdd,
   header,
@@ -13,6 +16,10 @@ const HeaderTable: React.FC<HeaderTableProps> = ({
   type,
   goBack,
 }) => {
+
+  const {loginData} = useAuthContext();
+
+
   if (type === 'update') {
     return (
       <div className="bg-white mt-2 d-flex justify-content-between align-items-center p-4 shadow-sm">
@@ -32,15 +39,22 @@ const HeaderTable: React.FC<HeaderTableProps> = ({
       <div className="header">
         <h2 className="m-0 ps-md-5">{header}</h2>
       </div>
-      <div className="px-3 py-1 d-flex align-items-center rounded-pill auth-btn text-light">
+      {loginData?.userGroup === 'Manager' ? (
+        <div className="px-3 py-1 d-flex align-items-center rounded-pill auth-btn text-light">
         <i className="fa-solid fa-plus"></i>
-        <button
+        
+          <button
           className="btn fw-medium border-0 text-light"
           onClick={handleAdd}
         >
           {namebtn}
         </button>
+        
       </div>
+      ) : (
+          ''
+      )}
+      
     </div>
   )
 }

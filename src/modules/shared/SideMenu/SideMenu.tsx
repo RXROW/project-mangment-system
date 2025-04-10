@@ -92,6 +92,15 @@ const SideMenu = () => {
             Tasks
           </MenuItem>
           <MenuItem
+            component={<Link to="/change-password" />}
+            title="Change Password"
+            icon={<i className="fas fa-unlock-alt"></i>}
+            active={activeItem === 'change-password'}
+            onClick={() => handleItemClick('change-password')}
+          >
+            Change Password
+          </MenuItem>
+          <MenuItem
             title="Logout"
             icon={<i className="fa-solid fa-right-from-bracket"></i>}
             active={activeItem === 'logout'}
