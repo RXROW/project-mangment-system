@@ -14,6 +14,9 @@ import ActionMenu from '../shared/ActionTable/ActionMenu'
 import TheadTable from '../shared/TheadTable/TheadTable/TheadTable'
 import Filtration from '../shared/Filter/Filter'
 import SpinnerTable from '../shared/Spinner/SpinnerTable'
+import TaskBoard from './TaskBoard/TaskBoard'
+import { div } from 'framer-motion/client'
+// import TaskBoard from './TaskBoard/TaskBoard'
 // Define types for task and props
 
 function Tasklist() {
@@ -25,11 +28,14 @@ function Tasklist() {
     alltasks,
     paginationtask,
     setpaginationtask,
+    loginData,
   } = useAuthContext()
   const { currentPage, totalNumberOfRecords, totalNumberOfPages } =
     paginationtask
 
   console.log(currentPage, totalNumberOfRecords, totalNumberOfPages)
+  console.log(loginData?.userGroup);
+
   const [modalShow, setModalShow] = useState<boolean>(false)
   const [modalShowdetails, setModalShowdetails] = useState<boolean>(false)
   const [currenttask, setcurrenttask] = useState<CurrentTask | null>(null)
@@ -68,11 +74,13 @@ function Tasklist() {
   return (
     <>
       <HeaderTable
-        header="Tasks"
+        // header="Tasks"
+        header={loginData?.userGroup === 'Manager' ? 'Tasks' : 'Tasks Board'}
         namebtn="Add New Task"
         handleAdd={handleAddTask}
       />
-      <div className="task-filter-table-pagination mx-2 my-3 bg-body rounded">
+      {loginData?.userGroup === 'Manager' ? (
+        <div className="task-filter-table-pagination mx-2 my-3 bg-body rounded">
         <div className="task-filter py-3 d-flex align-items-center gap-2">
           <div className="search-bar d-flex align-items-center">
             <div
@@ -159,7 +167,13 @@ function Tasklist() {
             totalNumberOfRecords={totalNumberOfRecords}
           />
         </div>
-      </div>
+        </div>
+      ) : (
+          
+            <TaskBoard/>
+      )}
+      
+
       <DeleteConfirmation
         toggleShow={modalShow}
         handleClose={() => setModalShow(false)}
