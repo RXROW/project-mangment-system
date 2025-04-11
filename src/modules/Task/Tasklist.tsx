@@ -34,7 +34,7 @@ function Tasklist() {
     paginationtask
 
   console.log(currentPage, totalNumberOfRecords, totalNumberOfPages)
-  console.log(loginData?.userGroup);
+  console.log(loginData?.userGroup)
 
   const [modalShow, setModalShow] = useState<boolean>(false)
   const [modalShowdetails, setModalShowdetails] = useState<boolean>(false)
@@ -80,99 +80,97 @@ function Tasklist() {
         handleAdd={handleAddTask}
       />
       {loginData?.userGroup === 'Manager' ? (
-        <div className="task-filter-table-pagination mx-2 my-3 bg-body rounded">
-        <div className="task-filter py-3 d-flex align-items-center gap-2">
-          <div className="search-bar d-flex align-items-center">
-            <div
-              className="position-relative fs-6"
-              style={{ left: '40px', marginTop: '-2px' }}
-            >
-              <i className="fa-solid fa-magnifying-glass text-secondary"></i>
+        <div className="task-filter-table-pagination mx-4 my-3 bg-body rounded">
+          <div className="task-filter p-4 d-flex align-items-center gap-2">
+            <div className="search-bar d-flex align-items-center">
+              <div
+                className="position-relative fs-6"
+                style={{ left: '40px', marginTop: '-2px' }}
+              >
+                <i className="fa-solid fa-magnifying-glass text-secondary"></i>
+              </div>
+              <input
+                type="search"
+                placeholder="Search By Title"
+                className="px-5 py-2 rounded-pill border-1 border"
+                onChange={handleSearchBarTasks}
+              />
             </div>
-            <input
-              type="search"
-              placeholder="Search Fleets"
-              className="px-5 py-2 rounded-pill border-1 border"
-              onChange={handleSearchBarTasks}
-            />
+            <div className="filter position-relative">
+              <select
+                className="form-select rounded-pill ps-5"
+                aria-label="Default select example"
+                onChange={handleSelectTasks}
+              >
+                <option selected value={'ToDo'} key={0}>
+                  Filter
+                </option>
+                <option key={1} value={'ToDo'}>
+                  To Do
+                </option>
+                <option key={2} value={'InProgress'}>
+                  In Progress
+                </option>
+                <option key={3} value={'Done'}>
+                  Done
+                </option>
+              </select>
+            </div>
           </div>
-          <div className="filter position-relative">
-            <select
-              className="form-select rounded-pill ps-5"
-              aria-label="Default select example"
-              onChange={handleSelectTasks}
-            >
-              <option selected value={'ToDo'} key={0}>
-                Filter
-              </option>
-              <option key={1} value={'ToDo'}>
-                To Do
-              </option>
-              <option key={2} value={'InProgress'}>
-                In Progress
-              </option>
-              <option key={3} value={'Done'}>
-                Done
-              </option>
-            </select>
-          </div>
-        </div>
-        {/* <Filtration pageName="tasks" /> */}
+          {/* <Filtration pageName="tasks" /> */}
 
-        <div className="task-table">
-          <table className="table table-striped table-hover text-center align-middle">
-            <TheadTable
-              colone="Title"
-              coltwo="Status"
-              colthree="User"
-              colfour="Project"
-              dateCreated="Date Created"
-              action="Action"
-              nametable="task"
-            />
-            <tbody>
-              {tasks?.length > 0 ? (
-                tasks?.map((task: CurrentTask) => (
-                  <tr key={task?.id}>
-                    <td data-label="title">{task?.title}</td>
-                    <td data-label="status">{task?.status}</td>
-                    <td data-label="userName">{task?.employee?.userName}</td>
-                    <td data-label="description">{task?.description}</td>
-                    <td data-label="creationDate" className="text-wrap">
-                      {new Date(task?.creationDate).toLocaleString()}
+          <div className="task-table">
+            <table className="table table-striped table-hover text-center align-middle">
+              <TheadTable
+                colone="Title"
+                coltwo="Status"
+                colthree="User"
+                colfour="Project"
+                dateCreated="Date Created"
+                action="Action"
+                nametable="task"
+              />
+              <tbody>
+                {tasks?.length > 0 ? (
+                  tasks?.map((task: CurrentTask) => (
+                    <tr key={task?.id}>
+                      <td data-label="title">{task?.title}</td>
+                      <td data-label="status">{task?.status}</td>
+                      <td data-label="userName">{task?.employee?.userName}</td>
+                      <td data-label="description">{task?.description}</td>
+                      <td data-label="creationDate" className="text-wrap">
+                        {new Date(task?.creationDate).toLocaleString()}
+                      </td>
+
+                      <ActionMenu
+                        onView={() => GetCurrentTask(task)}
+                        onEdit={() => handleEditTask(task.id)}
+                        onDelete={() => handleDeletetask(task.id)}
+                      />
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td className="text-center" colSpan={7}>
+                      {isLoading ? <SpinnerTable /> : <NoData />}
                     </td>
-
-                    <ActionMenu
-                      onView={() => GetCurrentTask(task)}
-                      onEdit={() => handleEditTask(task.id)}
-                      onDelete={() => handleDeletetask(task.id)}
-                    />
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td className="text-center" colSpan={7}>
-                    {isLoading ? <SpinnerTable /> : <NoData />}
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-        <div className="task-pagination">
-          <Newpagination
-            setpagination={setpaginationtask}
-            currentPage={currentPage}
-            totalNumberOfPages={totalNumberOfPages}
-            totalNumberOfRecords={totalNumberOfRecords}
-          />
-        </div>
+                )}
+              </tbody>
+            </table>
+          </div>
+          <div className="task-pagination">
+            <Newpagination
+              setpagination={setpaginationtask}
+              currentPage={currentPage}
+              totalNumberOfPages={totalNumberOfPages}
+              totalNumberOfRecords={totalNumberOfRecords}
+            />
+          </div>
         </div>
       ) : (
-          
-            <TaskBoard/>
+        <TaskBoard />
       )}
-      
 
       <DeleteConfirmation
         toggleShow={modalShow}
