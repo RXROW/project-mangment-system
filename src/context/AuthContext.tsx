@@ -60,6 +60,7 @@ export default function AuthContextProvider({
       setLoginData(decoded)
     } catch (error) {
       console.error('Error decoding token:', error)
+      localStorage.removeItem('token')
       setLoginData(null)
     }
   }
