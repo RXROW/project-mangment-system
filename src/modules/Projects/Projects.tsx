@@ -68,7 +68,7 @@ export default function Projects() {
             : PROJECTS_URLS.LIST_EMPLOYEE,
           {
             params: {
-              pageSize: 1,
+              pageSize: 10,
               pageNumber: pagination.currentPage,
               title: params.title || titleFilter,
               isActivated: statusFilter ? statusFilter === 'active' : null,
@@ -193,7 +193,7 @@ export default function Projects() {
         handleAdd={handleAddProject}
         namebtn="Add New Project"
       />
-      <div className=" mx-2 my-3 bg-body rounded">
+      <div className=" mx-4 my-3 bg-body rounded-3">
         <div className="table bg-white rounded-3 shadow-sm">
           <Filtration pageName="projects" />
 
@@ -213,7 +213,6 @@ export default function Projects() {
                     <td>{project?.title}</td>
                     <td>
                       <div
-                        bg={project?.isActivated ? 'danger' : 'success'}
                         className={`${
                           project?.isActivated ? 'bg-danger' : 'bg-custom-green'
                         } badge`}

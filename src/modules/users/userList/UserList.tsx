@@ -218,7 +218,7 @@ const UsersList: React.FC = () => {
         namebtn="Add New Users "
         handleAdd={handleAddUser}
       />
-      <div className=" mx-2 my-3 bg-body rounded">
+      <div className=" mx-4 my-3 bg-body rounded">
         <Filtration pageName="users" />
         <div className="user-table">
           <table className="table table-striped table-hover text-center align-middle">
@@ -237,12 +237,15 @@ const UsersList: React.FC = () => {
                   <tr key={user.id} className="border-bottom">
                     <td className="py-3 fw-medium">{user.userName}</td>
                     <td className="py-3">
-                      <Badge
-                        bg={user.isActivated ? 'success' : 'danger'}
-                        className="px-3 py-2 rounded-pill"
+                      <div
+                        className={`${
+                          user?.isActivated
+                            ? 'bg-custom-green'
+                            : 'bg-danger'
+                        } badge`}
                       >
-                        {user.isActivated ? 'Active' : 'Non-Active'}
-                      </Badge>
+                        {user.isActivated ? 'Active' : 'Deactive'}
+                      </div>
                     </td>
                     <td className="py-3">{user.phoneNumber}</td>
                     <td

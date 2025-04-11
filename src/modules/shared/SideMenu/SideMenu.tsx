@@ -101,6 +101,7 @@ const SideMenu = () => {
             Change Password
           </MenuItem>
           <MenuItem
+          className='mt-5'
             title="Logout"
             icon={<i className="fa-solid fa-right-from-bracket"></i>}
             active={activeItem === 'logout'}
