@@ -1,12 +1,17 @@
 import { useSearchParams } from 'react-router-dom'
 import styles from './Filter.module.css'
+import useThemeContext from '../../../hooks/useThemeContext'
 
 type FiltrationProps = {
   pageName: string
 }
 
 const Filtration = ({ pageName }: FiltrationProps) => {
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { theme } = useThemeContext();
+
+  const isDarkMode = theme === 'dark';
+
   const getNameValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     setSearchParams({ ...Object.fromEntries(searchParams), name: value })
@@ -27,27 +32,31 @@ const Filtration = ({ pageName }: FiltrationProps) => {
     const value = e.target.value
     setSearchParams({ ...Object.fromEntries(searchParams), status: value })
   }
+
+  // Define dark mode classes
+  const containerClass = `row mx-0 gap-lg-0 py-3 px-2 mt-3 align-items-center 
+    ${styles['filtration-container']} ${isDarkMode ? styles['dark-container'] : ''}`;
+
+  const inputGroupClass = `input-group-text border-end-0 ${isDarkMode ? 'bg-dark text-light' : 'bg-white'} ${styles['icon']}`;
+
+  const inputClass = `form-control border-start-0 ${styles['input']} ${isDarkMode ? styles['dark-input'] : ''}`;
+
   return (
-    <div
-      className={`row mx-0 gap-lg-0   py-3 px-2 mt-3 align-items-center 
-         ${styles['filtration-container']}`}
-    >
+    <div className={containerClass}>
       <div
-        className={`${
-          pageName === 'projects'
+        className={`${pageName === 'projects'
             ? 'col-12 col-md-8 col-lg-5'
             : pageName === 'users'
-            ? ' col-md-3'
-            : ''
-        }`}
+              ? ' col-md-3'
+              : ''
+          }`}
       >
         <div
-          className={` ${
-            pageName !== 'projects' ? 'col' : 'col-md-3'
-          }  input-group pb-2  rounded-2 `}
+          className={` ${pageName !== 'projects' ? 'col' : 'col-md-3'
+            }  input-group pb-2  rounded-2  bg-transparent`}
         >
           <span
-            className={`input-group-text border-end-0 bg-white ps-4 ${styles['icon']}`}
+            className={`${inputGroupClass} ps-4`}
             id="input-group-left-example"
           >
             <i className="fa fa-search " aria-hidden="true"></i>
@@ -55,7 +64,7 @@ const Filtration = ({ pageName }: FiltrationProps) => {
           <input
             type="text"
             placeholder="Search By Title "
-            className={`form-control border-start-0 " ${styles['input']}`}
+            className={inputClass}
             onChange={getNameValue}
             value={searchParams.get('name') || ''}
           />
@@ -64,9 +73,9 @@ const Filtration = ({ pageName }: FiltrationProps) => {
       {pageName === 'users' && (
         <>
           <div className="col-md-3">
-            <div className=" input-group pb-2">
+            <div className=" input-group  bg-transparent  pb-2">
               <span
-                className={`input-group-text border-end-0 bg-white ${styles['icon']}`}
+                className={inputGroupClass}
                 id="input-group-left-example"
               >
                 <i className="fa fa-envelope " aria-hidden="true"></i>
@@ -74,16 +83,16 @@ const Filtration = ({ pageName }: FiltrationProps) => {
               <input
                 type="text"
                 placeholder="Email address"
-                className={`form-control border-start-0 border border-1  ${styles['input']}`}
+                className={`${inputClass} border border-1`}
                 onChange={getEmailValue}
                 value={searchParams.get('email') || ''}
               />
             </div>
           </div>
-          <div className="col-md-3">
-            <div className="input-group pb-2 ">
+          <div className="col-md-3 ">
+            <div className="input-group bg-transparent  pb-2 ">
               <span
-                className={`input-group-text border-end-0 bg-white ${styles['icon']}`}
+                className={inputGroupClass}
                 id="input-group-left-example"
               >
                 <i className="fa fa-globe " aria-hidden="true"></i>
@@ -91,22 +100,22 @@ const Filtration = ({ pageName }: FiltrationProps) => {
               <input
                 type="text"
                 placeholder="Country"
-                className={`form-control border-start-0 ${styles['input']}`}
+                className={inputClass}
                 onChange={getCountryValue}
                 value={searchParams.get('country') || ''}
               />
             </div>
           </div>
           <div className="col-md-3">
-            <div className="input-group  pb-2">
+            <div className="input-group bg-transparent  pb-2">
               <span
-                className={`input-group-text border-end-0 bg-white ${styles['icon']}`}
+                className={inputGroupClass}
                 id="input-group-left-example"
               >
                 <i className="fa fa-user " aria-hidden="true"></i>
               </span>
               <select
-                className={`form-control border-start-0 ${styles['input']}`}
+                className={inputClass}
                 onChange={getGroupsValue}
                 value={searchParams.get('groups') || ''}
               >
@@ -123,11 +132,12 @@ const Filtration = ({ pageName }: FiltrationProps) => {
           <div className="input-group  pb-3 ">
             <div className="filter position-relative">
               <select
-                className="form-select  rounded-pill ps-5"
+                className={`form-select rounded-pill ps-5 ${isDarkMode ? styles['dark-select'] : ''}`}
                 aria-label="Default select example"
                 onChange={getStatusValue}
+                value={searchParams.get('status') || 'ToDo'}
               >
-                <option selected value={'ToDo'} key={0}>
+                <option value={'ToDo'} key={0}>
                   Filter
                 </option>
                 <option key={1} value={'ToDo'}>

@@ -15,10 +15,11 @@ import Newpagination from '../shared/Newpagination/Newpagination'
 import TheadTable from '../shared/TheadTable/TheadTable/TheadTable'
 import ActionMenu from '../shared/ActionTable/ActionMenu'
 import SpinnerTable from '../shared/Spinner/SpinnerTable'
+import useThemeContext from '../../hooks/useThemeContext'
 
 export default function Projects() {
   const navigate = useNavigate()
-
+  const { theme } = useThemeContext();
   const { setprojectfortask } = useAuthContext()
   const authContext = useContext(AuthContext)
   const { loginData } = authContext || {}
@@ -45,6 +46,7 @@ export default function Projects() {
     loading: false,
     viewModalOpen: false,
   })
+
   const handleClose = () => setShowDelete(false)
   const handleCloseDetails = () => {
     setSelectedProject((prev) => ({ ...prev, viewModalOpen: false }))
@@ -58,6 +60,7 @@ export default function Projects() {
     setSelectedId(id)
     setShowDelete(true)
   }
+
   const getAllProjects = useCallback(
     async (params: any = {}) => {
       setLoading(true)
@@ -91,6 +94,7 @@ export default function Projects() {
     },
     [loginData?.userGroup, pagination.currentPage, titleFilter, statusFilter]
   )
+
   const getFilteredProjects = useCallback(async () => {
     setFilterLoading(true)
     try {
@@ -186,18 +190,19 @@ export default function Projects() {
   const handleAddProject = () => {
     navigate('/dashboard/projects/new-project')
   }
+
   return (
-    <>
+    <div className={`p-2 rounded ${theme === 'dark' ? 'bg-dark text-white' : 'bg-body text-dark'}`}>
       <HeaderTable
         header="Projects"
         handleAdd={handleAddProject}
         namebtn="Add New Project"
       />
-      <div className=" mx-2 my-3 bg-body rounded">
-        <div className="table bg-white rounded-3 shadow-sm">
+      <div className="mx-2 my-3 rounded">
+        <div className={`table rounded-3 shadow-sm ${theme === 'dark' ? 'bg-dark text-white' : ''}`}>
           <Filtration pageName="projects" />
 
-          <table className="table table-striped text-center mb-0">
+          <table className={`table table-striped table-hover text-center align-middle ${theme === 'dark' ? 'table-dark' : ''}`}>
             <TheadTable
               colone="Title"
               coltwo="Status"
@@ -213,18 +218,13 @@ export default function Projects() {
                     <td>{project?.title}</td>
                     <td>
                       <div
-                        bg={project?.isActivated ? 'danger' : 'success'}
-                        className={`${
-                          project?.isActivated ? 'bg-danger' : 'bg-custom-green'
-                        } badge`}
+                        className={`badge ${project?.isActivated ? 'bg-danger' : 'bg-custom-green'}`}
                       >
                         {project?.isActivated ? 'Non-Active' : 'Active'}
                       </div>
                     </td>
                     <td>{project?.task?.length}</td>
-                    <td>
-                      {new Date(project?.creationDate).toLocaleDateString()}
-                    </td>
+                    <td>{new Date(project?.creationDate).toLocaleDateString()}</td>
                     <ActionMenu
                       onView={() => {
                         setSelectedProject({
@@ -262,7 +262,6 @@ export default function Projects() {
         toggleShow={showDelete}
         handleClose={handleClose}
       />
-
       {selectedProject.viewModalOpen && (
         <ViewDetailsModal
           show={selectedProject.viewModalOpen}
@@ -272,6 +271,6 @@ export default function Projects() {
           type="project"
         />
       )}
-    </>
+    </div>
   )
 }

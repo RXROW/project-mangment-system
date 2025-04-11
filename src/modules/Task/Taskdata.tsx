@@ -13,12 +13,16 @@ import { useAuthContext } from '../../context/AuthContext'
 import { useParams } from 'react-router-dom'
 import { JSX, useEffect, useState } from 'react'
 import HeaderTable from '../shared/HeaderTable/HeaderTable'
+import useThemeContext from '../../hooks/useThemeContext'
+
 export default function Taskdata(): JSX.Element {
   const { alltasks, userfortask, projectfortask } = useAuthContext()
   const [isFormEdited, setIsFormEdited] = useState<boolean>(false)
-  const params = useParams<RouteParams>()
+  const params = useParams<any>()
   const taskId = params.taskId
   const goBack = useMoveBack()
+  const { theme } = useThemeContext()
+  const isDarkMode = theme === "dark"
 
   const handleInputChange = (): void => {
     setIsFormEdited(true)
@@ -48,7 +52,7 @@ export default function Taskdata(): JSX.Element {
       goBack()
     } catch (error) {
       console.error(error)
-      toast.error(error.toString() || 'Failed to add task')
+      toast.error(error instanceof Error ? error.toString() : 'Failed to add task')
     }
   }
 
@@ -65,28 +69,46 @@ export default function Taskdata(): JSX.Element {
       console.error(error || 'Failed to get data')
     }
   }
+
   useEffect(() => {
     if (taskId) {
       getTaskById()
     }
   }, [taskId])
 
+  // Dynamic classes based on theme
+  const containerClass = isDarkMode
+    ? "container w-75 bg-dark text-white my-5 p-3 rounded-4 shadow-sm"
+    : "container w-75 bg-white my-5 p-3 rounded-4 shadow-sm"
+
+  const inputClass = isDarkMode
+    ? "form-control rounded-4 my-2 bg-dark text-white border-secondary"
+    : "form-control rounded-4 my-2"
+
+  const cancelBtnClass = isDarkMode
+    ? "btn btn-outline-light rounded-pill py-2 px-md-4"
+    : "btn btn-outline-dark rounded-pill py-2 px-md-4"
+
+  const formDividerClass = isDarkMode
+    ? "btn-container d-flex justify-content-between align-items-center border-1 border-top border-secondary py-4"
+    : "btn-container d-flex justify-content-between align-items-center border-1 border-top py-4"
+
   return (
-    <div>
+    <div className={isDarkMode ? "bg-dark text-white" : ""}>
       <HeaderTable
         goBack={goBack}
         type="update"
         header={taskId ? 'Update Task ' : 'Add a New Task'}
         namebtn="View All Tasks"
       />
-      <div className="container w-75 bg-white my-5 p-3 rounded-4 shadow-sm">
+      <div className={containerClass}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
             <label className="my-2 ms-2">Title</label>
             <input
               {...register('title', { required: 'Title is required' })}
               type="text"
-              className="form-control rounded-4 my-2"
+              className={inputClass}
               placeholder="Name"
               aria-label="Name"
               aria-describedby="basic-addon1"
@@ -103,7 +125,7 @@ export default function Taskdata(): JSX.Element {
               {...register('description', {
                 required: 'Description is required',
               })}
-              className="form-control rounded-4 my-2"
+              className={inputClass}
               placeholder="Description"
               name="description"
               onChange={handleInputChange}
@@ -117,7 +139,7 @@ export default function Taskdata(): JSX.Element {
               <div className="mb-4">
                 <label className="my-2 ms-2">User</label>
                 <select
-                  className="form-control rounded-4 my-2"
+                  className={inputClass}
                   {...register('employeeId', { required: 'User is required' })}
                   name="employeeId"
                   onChange={handleInputChange}
@@ -147,8 +169,9 @@ export default function Taskdata(): JSX.Element {
                     {...register('projectId', {
                       required: 'Project is required',
                     })}
-                    className="form-control rounded-4 my-2"
+                    className={inputClass}
                     name="projectId"
+                    onChange={handleInputChange}
                   >
                     {projectfortask?.length === 0 && (
                       <option value="">No Project Available</option>
@@ -171,10 +194,10 @@ export default function Taskdata(): JSX.Element {
               </div>
             )}
           </div>
-          <div className="btn-container d-flex justify-content-between align-items-center border-1 border-top py-4">
+          <div className={formDividerClass}>
             <span
               onClick={() => goBack()}
-              className="btn btn-outline-dark rounded-pill py-2 px-md-4"
+              className={cancelBtnClass}
             >
               Cancel
             </span>
