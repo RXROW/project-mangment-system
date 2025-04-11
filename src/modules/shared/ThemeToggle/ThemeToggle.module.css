@@ -1,0 +1,10 @@
+.moon {
+  color: var(--main-colr);
+  font-size: 20px;
+  cursor: pointer;
+}
+.sun {
+  color: var(--main-colr);
+  font-size: 20px;
+  cursor: pointer;
+}

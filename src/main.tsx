@@ -6,11 +6,15 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import App from './App.tsx'
 import AuthContextProvider from './context/AuthContext.tsx';
+import ThemeContextProvider from './context/ThemeContext.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AuthContextProvider>
-      <App />
+      <ThemeContextProvider>
+        <App />
+      </ThemeContextProvider>
+    
       </AuthContextProvider>
   </StrictMode>,
 )
