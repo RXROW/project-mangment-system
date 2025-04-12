@@ -161,7 +161,7 @@ export default function ProjectForm() {
             <button
               type="button"
               onClick={handleSubmit(onSubmit)}
-              className="btn btn-warning rounded-pill py-2 px-md-4 text-white"
+              className="btn bg-custom-warning rounded-pill py-2 px-md-4 text-white"
             >
               {isSubmitting ? (
                 <i className="fas fa-spin fa-spinner bg-transparent text-white"></i>

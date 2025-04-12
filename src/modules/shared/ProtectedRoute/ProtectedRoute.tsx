@@ -1,12 +1,39 @@
+import { useEffect } from 'react'
 import { useAuthContext } from '../../../context/AuthContext'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
+import SpinnerPages from '../SpinnerPages/SpinnerPages'
 
-type Props = {
+interface ProtectedRouteProps {
   children: React.ReactNode
 }
 
-export default function ProtectedRoute({ children }: Props) {
+export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const token = localStorage.getItem('token')
-  const { loginData } = useAuthContext()
-  return token || loginData ? children : <Navigate to={'/login'} />
+  const { loginData, saveLoginData } = useAuthContext()
+  const location = useLocation()
+  const allowedRoutes = ['dashboard', 'tasks', 'projects']
+  const currentPath =
+    location.pathname.split('/')[location.pathname.split('/').length - 1]
+  useEffect(() => {
+    if (token && !loginData) {
+      saveLoginData()
+    }
+  }, [token, loginData, saveLoginData])
+
+  if (token && !loginData) {
+    return (
+      <>
+        <SpinnerPages />
+      </>
+    )
+  }
+  if (!token || !loginData) {
+    return <Navigate to="/login" state={{ from: location.pathname }} replace />
+  }
+  if (loginData.userGroup !== 'Manager') {
+    if (!allowedRoutes.includes(currentPath)) {
+      return <Navigate to="/login" replace />
+    }
+  }
+  return <>{children}</>
 }

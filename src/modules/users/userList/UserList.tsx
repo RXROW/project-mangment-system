@@ -219,6 +219,7 @@ const UsersList: React.FC = () => {
         namebtn="Add New Users "
         handleAdd={handleAddUser}
       />
+ 
       <div className="mx-2 my-3 rounded" >
         <div className={`table rounded-3 shadow-sm ${theme === 'dark' ? 'bg-dark text-white' : ''}`}>
           <Filtration pageName="users" />
@@ -266,6 +267,43 @@ const UsersList: React.FC = () => {
                   <tr>
                     <td className="text-center" colSpan={7}>
                       {isLoading ? <SpinnerTable /> : <NoData />}
+ 
+      <div className=" mx-4 my-3 bg-body rounded">
+        <Filtration pageName="users" />
+        <div className="user-table">
+          <table className="table table-striped table-hover text-center align-middle">
+            <TheadTable
+              colone="User Name"
+              coltwo="Status"
+              colthree="Phone Number"
+              colfour="Email"
+              dateCreated="Date Created"
+              action="Action"
+              nametable="project"
+            />
+            <tbody>
+              {usersListToDisplay && usersListToDisplay.length > 0 ? (
+                usersListToDisplay.map((user) => (
+                  <tr key={user.id} className="border-bottom">
+                    <td className="py-3 fw-medium">{user.userName}</td>
+                    <td className="py-3">
+                      <div
+                        className={`${
+                          user?.isActivated
+                            ? 'bg-custom-green'
+                            : 'bg-danger'
+                        } badge`}
+                      >
+                        {user.isActivated ? 'Active' : 'Deactive'}
+                      </div>
+                    </td>
+                    <td className="py-3">{user.phoneNumber}</td>
+                    <td
+                      className="py-3 text-truncate"
+                      style={{ maxWidth: '200px' }}
+                    >
+                      {user.email}
+ 
                     </td>
                   </tr>
                 )}

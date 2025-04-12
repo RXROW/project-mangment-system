@@ -19,7 +19,9 @@ import useThemeContext from '../../hooks/useThemeContext'
 
 export default function Projects() {
   const navigate = useNavigate()
+ 
   const { theme } = useThemeContext();
+ 
   const { setprojectfortask } = useAuthContext()
   const authContext = useContext(AuthContext)
   const { loginData } = authContext || {}
@@ -46,23 +48,26 @@ export default function Projects() {
     loading: false,
     viewModalOpen: false,
   })
-
+ 
+  const titleFilter = searchParams.get('title') || ''
+  const statusFilter = searchParams.get('status') || ''
+ 
   const handleClose = () => setShowDelete(false)
   const handleCloseDetails = () => {
     setSelectedProject((prev) => ({ ...prev, viewModalOpen: false }))
   }
-  const titleFilter = searchParams.get('title') || ''
-  const statusFilter = searchParams.get('status') || ''
+
   const handleEditProject = (id: number) => {
     navigate(`${id}`)
   }
+
   const handleShowDelete = (id: number) => {
     setSelectedId(id)
     setShowDelete(true)
   }
 
   const getAllProjects = useCallback(
-    async (params: any = {}) => {
+    async (params: { title?: string; status?: string } = {}) => {
       setLoading(true)
       try {
         const response = await privateInstance.get(
@@ -71,10 +76,14 @@ export default function Projects() {
             : PROJECTS_URLS.LIST_EMPLOYEE,
           {
             params: {
-              pageSize: 1,
+              pageSize: 10,
               pageNumber: pagination.currentPage,
               title: params.title || titleFilter,
-              isActivated: statusFilter ? statusFilter === 'active' : null,
+              isActivated: params.status 
+                ? params.status === 'active' 
+                : statusFilter 
+                  ? statusFilter === 'active' 
+                  : null,
             },
           }
         )
@@ -92,38 +101,33 @@ export default function Projects() {
         setLoading(false)
       }
     },
-    [loginData?.userGroup, pagination.currentPage, titleFilter, statusFilter]
+    [loginData?.userGroup, pagination.currentPage, titleFilter, statusFilter, setprojectfortask]
   )
-
+ 
   const getFilteredProjects = useCallback(async () => {
+ 
+  const handleFilter = useCallback(async (filterParams: { title?: string; status?: string }) => {
+ 
     setFilterLoading(true)
     try {
-      const response = await privateInstance.get(
-        loginData?.userGroup === 'Manager'
-          ? PROJECTS_URLS.LIST_MANAGER
-          : PROJECTS_URLS.LIST_EMPLOYEE,
-        {
-          params: {
-            pageSize: 20,
-            pageNumber: pagination.currentPage,
-            title: titleFilter,
-            isActivated: statusFilter ? statusFilter === 'active' : null,
-          },
-        }
-      )
-      setProjectsList(response?.data?.data)
-      setpagination({
-        currentPage: response?.data?.pageNumber,
-        totalNumberOfRecords: response?.data?.totalNumberOfRecords,
-        totalNumberOfPages: response?.data?.totalNumberOfPages,
-      })
+      
+      const newSearchParams = new URLSearchParams()
+      if (filterParams.title) newSearchParams.set('title', filterParams.title)
+      if (filterParams.status) newSearchParams.set('status', filterParams.status)
+      setSearchParams(newSearchParams)
+
+      
+      setpagination(prev => ({ ...prev, currentPage: 1 }))
+      
+      
+      await getAllProjects(filterParams)
     } catch (error) {
       toast.error('Failed to filter projects')
       console.log(error)
     } finally {
       setFilterLoading(false)
     }
-  }, [loginData?.userGroup, pagination.currentPage, titleFilter, statusFilter])
+  }, [getAllProjects, setSearchParams])
 
   const getTaskNumber = async () => {
     setLoading(true)
@@ -175,12 +179,12 @@ export default function Projects() {
   }
 
   useEffect(() => {
-    if (searchParams.toString()) {
-      getFilteredProjects()
+    if (titleFilter || statusFilter) {
+      handleFilter({ title: titleFilter, status: statusFilter })
     } else {
       getAllProjects()
     }
-  }, [searchParams, getAllProjects, getFilteredProjects])
+  }, [titleFilter, statusFilter, getAllProjects, handleFilter])
 
   useEffect(() => {
     getTaskNumber()
@@ -198,9 +202,19 @@ export default function Projects() {
         handleAdd={handleAddProject}
         namebtn="Add New Project"
       />
+ 
       <div className="mx-2 my-3 rounded">
         <div className={`table rounded-3 shadow-sm ${theme === 'dark' ? 'bg-dark text-white' : ''}`}>
           <Filtration pageName="projects" />
+ 
+      <div className=" mx-4 my-3 bg-body rounded-3">
+        <div className="table bg-white rounded-3 shadow-sm">
+          <Filtration 
+            pageName="projects" 
+            onFilter={handleFilter} 
+            initialValues={{ title: titleFilter, status: statusFilter }}
+          />
+ 
 
           <table className={`table table-striped table-hover text-center align-middle ${theme === 'dark' ? 'table-dark' : ''}`}>
             <TheadTable
@@ -218,7 +232,13 @@ export default function Projects() {
                     <td>{project?.title}</td>
                     <td>
                       <div
+ 
                         className={`badge ${project?.isActivated ? 'bg-danger' : 'bg-custom-green'}`}
+ 
+                        className={`${
+                          project?.isActivated ? 'bg-danger' : 'bg-custom-green'
+                        } badge`}
+ 
                       >
                         {project?.isActivated ? 'Non-Active' : 'Active'}
                       </div>

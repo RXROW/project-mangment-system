@@ -3,7 +3,6 @@ import { Status, Task } from '../../../interfaces/TaskBoardResponse';
 import { privateInstance } from '../../../services/apiConfig';
 import { TASKS_URLS } from '../../../services/apiUrls';
 import { motion } from 'framer-motion';
-import SpinnerTable from '../../shared/Spinner/SpinnerTable';
 import { Spinner } from 'react-bootstrap';
 
 const TaskColumn = ({ title, tasks, refetchTasks, setTasks, loading }:
