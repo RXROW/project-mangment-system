@@ -1,8 +1,7 @@
 import { useCallback, useContext, useEffect, useState } from 'react'
-import Filtration from '../shared/Filter/Filter'
+import  Filtration  from '../shared/Filter/Filter'
 import { privateInstance } from '../../services/apiConfig'
 import { PROJECTS_URLS, TASKS_URLS } from '../../services/apiUrls'
-import Dropdown from 'react-bootstrap/Dropdown'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ProjectsType } from '../../interfaces/projectsListInterfaces'
 import { AuthContext, useAuthContext } from '../../context/AuthContext'
@@ -19,24 +18,29 @@ import useThemeContext from '../../hooks/useThemeContext'
 
 export default function Projects() {
   const navigate = useNavigate()
- 
-  const { theme } = useThemeContext();
- 
+  const { theme } = useThemeContext()
   const { setprojectfortask } = useAuthContext()
   const authContext = useContext(AuthContext)
   const { loginData } = authContext || {}
+   
   const [selectedId, setSelectedId] = useState<number>(0)
   const [showDelete, setShowDelete] = useState(false)
   const [filterLoading, setFilterLoading] = useState(false)
   const [loading, setLoading] = useState(false)
+
   const [pagination, setpagination] = useState({
     currentPage: 1,
     totalNumberOfRecords: 0,
     totalNumberOfPages: 0,
   })
+
   const [searchParams, setSearchParams] = useSearchParams()
+  const titleFilter = searchParams.get('title') || ''
+  const statusFilter = searchParams.get('status') || ''
+
   const [projectsList, setProjectsList] = useState<ProjectsType[]>([])
   const [tasks, setTasks] = useState<number | null>(null)
+
   const [selectedProject, setSelectedProject] = useState<{
     id: number | null
     data: ProjectsType | null
@@ -48,19 +52,12 @@ export default function Projects() {
     loading: false,
     viewModalOpen: false,
   })
- 
-  const titleFilter = searchParams.get('title') || ''
-  const statusFilter = searchParams.get('status') || ''
- 
+
   const handleClose = () => setShowDelete(false)
-  const handleCloseDetails = () => {
+  const handleCloseDetails = () =>
     setSelectedProject((prev) => ({ ...prev, viewModalOpen: false }))
-  }
 
-  const handleEditProject = (id: number) => {
-    navigate(`${id}`)
-  }
-
+  const handleEditProject = (id: number) => navigate(`${id}`)
   const handleShowDelete = (id: number) => {
     setSelectedId(id)
     setShowDelete(true)
@@ -79,16 +76,18 @@ export default function Projects() {
               pageSize: 10,
               pageNumber: pagination.currentPage,
               title: params.title || titleFilter,
-              isActivated: params.status 
-                ? params.status === 'active' 
-                : statusFilter 
-                  ? statusFilter === 'active' 
-                  : null,
+              isActivated:
+                params.status
+                  ? params.status === 'active'
+                  : statusFilter
+                    ? statusFilter === 'active'
+                    : null,
             },
           }
         )
-        setProjectsList(response?.data?.data)
-        setprojectfortask(response?.data?.data)
+
+        setProjectsList(response?.data?.data || [])
+        setprojectfortask(response?.data?.data || [])
         setpagination({
           currentPage: response?.data?.pageNumber,
           totalNumberOfRecords: response?.data?.totalNumberOfRecords,
@@ -96,38 +95,34 @@ export default function Projects() {
         })
       } catch (error) {
         toast.error('Failed to load projects')
-        console.log(error)
+        console.error(error)
       } finally {
         setLoading(false)
       }
     },
     [loginData?.userGroup, pagination.currentPage, titleFilter, statusFilter, setprojectfortask]
   )
- 
-  const getFilteredProjects = useCallback(async () => {
- 
-  const handleFilter = useCallback(async (filterParams: { title?: string; status?: string }) => {
- 
-    setFilterLoading(true)
-    try {
-      
-      const newSearchParams = new URLSearchParams()
-      if (filterParams.title) newSearchParams.set('title', filterParams.title)
-      if (filterParams.status) newSearchParams.set('status', filterParams.status)
-      setSearchParams(newSearchParams)
 
-      
-      setpagination(prev => ({ ...prev, currentPage: 1 }))
-      
-      
-      await getAllProjects(filterParams)
-    } catch (error) {
-      toast.error('Failed to filter projects')
-      console.log(error)
-    } finally {
-      setFilterLoading(false)
-    }
-  }, [getAllProjects, setSearchParams])
+  const handleFilter = useCallback(
+    async (filterParams: { title?: string; status?: string }) => {
+      setFilterLoading(true)
+      try {
+        const newSearchParams = new URLSearchParams()
+        if (filterParams.title) newSearchParams.set('title', filterParams.title)
+        if (filterParams.status) newSearchParams.set('status', filterParams.status)
+        setSearchParams(newSearchParams)
+
+        setpagination((prev) => ({ ...prev, currentPage: 1 }))
+        await getAllProjects(filterParams)
+      } catch (error) {
+        toast.error('Failed to filter projects')
+        console.error(error)
+      } finally {
+        setFilterLoading(false)
+      }
+    },
+    [getAllProjects, setSearchParams]
+  )
 
   const getTaskNumber = async () => {
     setLoading(true)
@@ -135,7 +130,7 @@ export default function Projects() {
       const response = await privateInstance.get(TASKS_URLS.COUNT_TASKS)
       setTasks(response?.data?.toDo)
     } catch (error) {
-      console.log(error)
+      console.error(error)
     } finally {
       setLoading(false)
     }
@@ -155,6 +150,7 @@ export default function Projects() {
       }
     } catch (error) {
       toast.error('An unknown error occurred')
+      console.error(error)
     } finally {
       setLoading(false)
       handleClose()
@@ -191,30 +187,18 @@ export default function Projects() {
   }, [])
 
   const isLoading = loading || filterLoading
-  const handleAddProject = () => {
-    navigate('/dashboard/projects/new-project')
-  }
+  const handleAddProject = () => navigate('/dashboard/projects/new-project')
 
   return (
     <div className={`p-2 rounded ${theme === 'dark' ? 'bg-dark text-white' : 'bg-body text-dark'}`}>
-      <HeaderTable
-        header="Projects"
-        handleAdd={handleAddProject}
-        namebtn="Add New Project"
-      />
- 
+      <HeaderTable header="Projects" handleAdd={handleAddProject} namebtn="Add New Project" />
       <div className="mx-2 my-3 rounded">
         <div className={`table rounded-3 shadow-sm ${theme === 'dark' ? 'bg-dark text-white' : ''}`}>
-          <Filtration pageName="projects" />
- 
-      <div className=" mx-4 my-3 bg-body rounded-3">
-        <div className="table bg-white rounded-3 shadow-sm">
-          <Filtration 
-            pageName="projects" 
-            onFilter={handleFilter} 
+          <Filtration
+            pageName="projects"
+            onFilter={handleFilter}
             initialValues={{ title: titleFilter, status: statusFilter }}
           />
- 
 
           <table className={`table table-striped table-hover text-center align-middle ${theme === 'dark' ? 'table-dark' : ''}`}>
             <TheadTable
@@ -223,41 +207,36 @@ export default function Projects() {
               colthree="Num Task"
               colfour="Project"
               dateCreated="Date Created"
-              action="Action"
+              action={loginData?.userGroup === 'Manager' ? 'Action' : ''}
             />
             <tbody>
-              {projectsList?.length > 0 ? (
-                projectsList?.map((project: ProjectsType) => (
-                  <tr key={project?.id}>
-                    <td>{project?.title}</td>
+              {projectsList.length > 0 ? (
+                projectsList.map((project) => (
+                  <tr key={project.id}>
+                    <td>{project.title}</td>
                     <td>
-                      <div
- 
-                        className={`badge ${project?.isActivated ? 'bg-danger' : 'bg-custom-green'}`}
- 
-                        className={`${
-                          project?.isActivated ? 'bg-danger' : 'bg-custom-green'
-                        } badge`}
- 
-                      >
-                        {project?.isActivated ? 'Non-Active' : 'Active'}
+                      <div className={`badge ${project.isActivated ? 'bg-danger' : 'bg-custom-green'}`}>
+                        {project.isActivated ? 'Non-Active' : 'Active'}
                       </div>
                     </td>
-                    <td>{project?.task?.length}</td>
-                    <td>{new Date(project?.creationDate).toLocaleDateString()}</td>
-                    <ActionMenu
-                      onView={() => {
-                        setSelectedProject({
-                          id: project.id,
-                          data: null,
-                          loading: true,
-                          viewModalOpen: true,
-                        })
-                        viewProject(project.id)
-                      }}
-                      onEdit={() => handleEditProject(project?.id)}
-                      onDelete={() => handleShowDelete(project?.id)}
-                    />
+                    <td>{project.task?.length}</td>
+                    <td>{new Date(project.creationDate).toLocaleDateString()}</td>
+                    {loginData?.userGroup === 'Manager' ? (
+                      <ActionMenu
+                        onView={() => {
+                          setSelectedProject({
+                            id: project.id,
+                            data: null,
+                            loading: true,
+                            viewModalOpen: true,
+                          })
+                          viewProject(project.id)
+                        }}
+                        onEdit={() => handleEditProject(project.id)}
+                        onDelete={() => handleShowDelete(project.id)}
+                      />
+                    ): (null)}
+                 
                   </tr>
                 ))
               ) : (
@@ -269,6 +248,7 @@ export default function Projects() {
               )}
             </tbody>
           </table>
+
           <Newpagination
             setpagination={setpagination}
             currentPage={pagination.currentPage}
@@ -277,11 +257,13 @@ export default function Projects() {
           />
         </div>
       </div>
+
       <DeleteConfirmation
         deleteFunction={deleteProject}
         toggleShow={showDelete}
         handleClose={handleClose}
       />
+
       {selectedProject.viewModalOpen && (
         <ViewDetailsModal
           show={selectedProject.viewModalOpen}

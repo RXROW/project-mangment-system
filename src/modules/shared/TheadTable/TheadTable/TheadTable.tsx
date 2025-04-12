@@ -39,11 +39,11 @@ function TheadTable({
         <th scope="col" className="py-3">
           {dateCreated} <i className="fa-solid fa-sort"></i>
         </th>
-        {loginData?.userGroup !== 'Manger' && (
+        {loginData?.userGroup == 'Manger'?  (
           <th scope="col" className="py-3">
             {action} <i className="fa-solid fa-sort"></i>
           </th>
-        )}
+        ): null}
       </tr>
     </thead>
   )

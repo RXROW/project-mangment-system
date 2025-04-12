@@ -1,45 +1,56 @@
 import { FC } from 'react'
 import { Modal, Button, Spinner, Badge } from 'react-bootstrap'
-import { ViewDetailsModalProps } from '../../../interfaces/authInterfaces'
+// import { ViewDetailsModalProps } from '../../../interfaces/authInterfaces'
 import { formatDate } from '../../shared/helperFunctions/formatDate'
+import useThemeContext from '../../../hooks/useThemeContext'
 
-const ViewDetailsModal: FC<ViewDetailsModalProps> = ({
+const ViewDetailsModal: FC<any> = ({
   show,
   handleClose,
   details,
   loading,
   type = 'user', // 'user' | 'project'
 }) => {
+  const { theme } = useThemeContext()
+  const isDarkMode = theme === 'dark'
+
+  const darkModeClasses = isDarkMode ? {
+    modal: 'bg-dark text-light',
+    header: 'border-secondary bg-dark text-light',
+    closeButton: 'btn-close-white',
+    table: 'table-dark'
+  } : {}
+
   return (
-    <Modal show={show} onHide={handleClose} centered size="lg">
-      <Modal.Header closeButton>
+    <Modal show={show} onHide={handleClose} centered size="lg" contentClassName={darkModeClasses.modal}>
+      <Modal.Header closeButton className={darkModeClasses.header}>
         <Modal.Title>
           {type === 'project'
             ? 'Project Details'
             : type === 'task'
-            ? 'Task Details'
-            : 'User Details'}
+              ? 'Task Details'
+              : 'User Details'}
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className={isDarkMode ? 'bg-dark text-light' : ''}>
         {loading ? (
           <div className="d-flex justify-content-center py-4">
-            <Spinner animation="border" variant="warning" />
+            <Spinner animation="border" variant={isDarkMode ? "light" : "warning"} />
           </div>
         ) : !details ? (
           <div className="text-center py-4">
             <p>Details not available.</p>
           </div>
         ) : type === 'project' ? (
-          <ProjectDetails details={details} />
+          <ProjectDetails details={details} isDarkMode={isDarkMode} />
         ) : type === 'task' ? (
-          <TaskDetails details={details} />
+          <TaskDetails details={details} isDarkMode={isDarkMode} />
         ) : (
-          <UserDetails details={details} />
+          <UserDetails details={details} isDarkMode={isDarkMode} />
         )}
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+      <Modal.Footer className={isDarkMode ? 'bg-dark text-light border-secondary' : ''}>
+        <Button variant={isDarkMode ? "outline-light" : "secondary"} onClick={handleClose}>
           Close
         </Button>
       </Modal.Footer>
@@ -48,13 +59,15 @@ const ViewDetailsModal: FC<ViewDetailsModalProps> = ({
 }
 
 // User Details Component
-const UserDetails = ({ details }: { details: any }) => {
+const UserDetails = ({ details, isDarkMode }: { details: any, isDarkMode: boolean }) => {
+  const tableClass = isDarkMode ? 'table table-borderless table-dark' : 'table table-borderless'
+
   return (
     <div className="user-details-container">
       <div className="row mb-3">
         <div className="col-md-6">
           <h5 className="mb-3">Basic Information</h5>
-          <table className="table table-borderless">
+          <table className={tableClass}>
             <tbody>
               <tr>
                 <td className="fw-bold">Username:</td>
@@ -89,7 +102,7 @@ const UserDetails = ({ details }: { details: any }) => {
         </div>
         <div className="col-md-6">
           <h5 className="mb-3">Account Information</h5>
-          <table className="table table-borderless">
+          <table className={tableClass}>
             <tbody>
               <tr>
                 <td className="fw-bold">User ID:</td>
@@ -120,7 +133,7 @@ const UserDetails = ({ details }: { details: any }) => {
             <h5 className="mb-3">Groups</h5>
             <div className="d-flex flex-wrap gap-2">
               {details.groups.map((group: any, index: any) => (
-                <Badge key={index} bg="info">
+                <Badge key={index} bg={isDarkMode ? "primary" : "info"}>
                   {group}
                 </Badge>
               ))}
@@ -131,14 +144,17 @@ const UserDetails = ({ details }: { details: any }) => {
     </div>
   )
 }
+
 // Project Details Component
-const ProjectDetails = ({ details }: { details: any }) => {
+const ProjectDetails = ({ details, isDarkMode }: { details: any, isDarkMode: boolean }) => {
+  const tableClass = isDarkMode ? 'table table-borderless table-dark' : 'table table-borderless'
+
   return (
     <div className="project-details-container">
       <div className="row mb-3">
         <div className="col-md-6">
           <h5 className="mb-3">Basic Information</h5>
-          <table className="table table-borderless">
+          <table className={tableClass}>
             <tbody>
               <tr>
                 <td className="fw-bold">Title:</td>
@@ -157,7 +173,7 @@ const ProjectDetails = ({ details }: { details: any }) => {
         </div>
         <div className="col-md-6">
           <h5 className="mb-3">Status Information</h5>
-          <table className="table table-borderless">
+          <table className={tableClass}>
             <tbody>
               <tr>
                 <td className="fw-bold">Project ID:</td>
@@ -184,9 +200,10 @@ const ProjectDetails = ({ details }: { details: any }) => {
     </div>
   )
 }
-const TaskDetails = ({ details }: { details: any }) => {
+
+const TaskDetails = ({ details, isDarkMode }: { details: any, isDarkMode: boolean }) => {
   return (
-    <>
+    <div className={isDarkMode ? "text-light" : ""}>
       {details ? (
         <div>
           <p>
@@ -202,14 +219,15 @@ const TaskDetails = ({ details }: { details: any }) => {
             <strong>Assigned User:</strong> {details.employee?.userName}
           </p>
           <p>
-            <strong>Creation Date:</strong>
+            <strong>Creation Date:</strong>{' '}
             {new Date(details.creationDate).toLocaleString()}
           </p>
         </div>
       ) : (
         <p>No task selected.</p>
       )}
-    </>
+    </div>
   )
 }
+
 export default ViewDetailsModal
