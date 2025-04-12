@@ -21,9 +21,10 @@ import TheadTable from '../../shared/TheadTable/TheadTable/TheadTable'
 import HeaderTable from '../../shared/HeaderTable/HeaderTable'
 import ActionMenu from '../../shared/ActionTable/ActionMenu'
 import SpinnerTable from '../../shared/Spinner/SpinnerTable'
+import useThemeContext from '../../../hooks/useThemeContext'
 
 const SortIcon: React.FC = () => (
-  <span className="ms-1  fw-light ">
+  <span className="ms-1 fw-light">
     <i className="fa fa-sort text-white" aria-hidden="true"></i>
   </span>
 )
@@ -31,6 +32,7 @@ const SortIcon: React.FC = () => (
 const UsersList: React.FC = () => {
   // State management
   const navigate = useNavigate()
+  const { theme } = useThemeContext();
   const [usersList, setUsersList] = useState<User[]>([])
   const { setUserfortask } = useAuthContext()
   const [filteredUsers, setFilteredUsers] = useState<User[] | null>(null)
@@ -91,7 +93,7 @@ const UsersList: React.FC = () => {
     },
     [pagination.currentPage, setUserfortask]
   )
-  console.log(usersList)
+
   // API request to filter users
   const getFilteredUsers = useCallback(async () => {
     setFilterLoading(true)
@@ -131,8 +133,7 @@ const UsersList: React.FC = () => {
       const response = await privateInstance.put(USERS_URLS.TOGGLE_USER(id), {})
       getAllUsers()
       toast.success(
-        `User has been ${
-          response.data.isActivated ? 'activated' : 'deactivated'
+        `User has been ${response.data.isActivated ? 'activated' : 'deactivated'
         } successfully.`
       )
     } catch (error) {
@@ -212,12 +213,61 @@ const UsersList: React.FC = () => {
   const isLoading = loading || filterLoading
 
   return (
-    <>
+    <div className={`p-2 rounded ${theme === 'dark' ? 'bg-dark text-white' : 'bg-body text-dark'}`}>
       <HeaderTable
         header="Users"
         namebtn="Add New Users "
         handleAdd={handleAddUser}
       />
+ 
+      <div className="mx-2 my-3 rounded" >
+        <div className={`table rounded-3 shadow-sm ${theme === 'dark' ? 'bg-dark text-white' : ''}`}>
+          <Filtration pageName="users" />
+          <div className="user-table">
+            <table className={`table table-striped table-hover text-center align-middle ${theme === 'dark' ? 'table-dark' : ''}`}>
+              <TheadTable
+                colone="User Name"
+                coltwo="Status"
+                colthree="Phone Number"
+                colfour="Email"
+                dateCreated="Date Created"
+                action="Action"
+                nametable="project"
+              />
+              <tbody>
+                {usersListToDisplay && usersListToDisplay.length > 0 ? (
+                  usersListToDisplay.map((user) => (
+                    <tr key={user.id} className={`border-bottom ${theme === 'dark' ? 'border-secondary' : ''}`}>
+                      <td className="py-3 fw-medium">{user.userName}</td>
+                      <td className="py-3">
+                        <Badge
+                          bg={user.isActivated ? 'success' : 'danger'}
+                          className="px-3 py-2 rounded-pill"
+                        >
+                          {user.isActivated ? 'Active' : 'Non-Active'}
+                        </Badge>
+                      </td>
+                      <td className="py-3">{user.phoneNumber}</td>
+                      <td
+                        className="py-3 text-truncate"
+                        style={{ maxWidth: '200px' }}
+                      >
+                        {user.email}
+                      </td>
+                      <td className="py-3">{formatDate(user.creationDate)}</td>
+                      <ActionMenu
+                        onView={() => handleOpenDetails(user.id)}
+                        onEdit={() => toggleActivation(user?.id)}
+                        name="user"
+                        user={user}
+                      />
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td className="text-center" colSpan={7}>
+                      {isLoading ? <SpinnerTable /> : <NoData />}
+ 
       <div className=" mx-4 my-3 bg-body rounded">
         <Filtration pageName="users" />
         <div className="user-table">
@@ -253,32 +303,20 @@ const UsersList: React.FC = () => {
                       style={{ maxWidth: '200px' }}
                     >
                       {user.email}
+ 
                     </td>
-                    <td className="py-3">{formatDate(user.creationDate)}</td>
-                    <ActionMenu
-                      onView={() => handleOpenDetails(user.id)}
-                      onEdit={() => toggleActivation(user?.id)}
-                      name="user"
-                      user={user}
-                    />
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td className="text-center" colSpan={7}>
-                    {isLoading ? <SpinnerTable /> : <NoData />}
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                )}
+              </tbody>
+            </table>
+          </div>
+          <Newpagination
+            setpagination={setpagination}
+            currentPage={pagination.currentPage}
+            totalNumberOfPages={pagination.totalNumberOfPages}
+            totalNumberOfRecords={pagination.totalNumberOfRecords}
+          />
         </div>
-        <Newpagination
-          setpagination={setpagination}
-          currentPage={pagination.currentPage}
-          totalNumberOfPages={pagination.totalNumberOfPages}
-          totalNumberOfRecords={pagination.totalNumberOfRecords}
-        />
       </div>
       {selectedUser.viewModalOpen && (
         <ViewDetailsModal
@@ -288,7 +326,7 @@ const UsersList: React.FC = () => {
           details={selectedUser.data}
         />
       )}
-    </>
+    </div>
   )
 }
 

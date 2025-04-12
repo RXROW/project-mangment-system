@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 import { useEffect } from 'react'
 import HeaderTable from '../shared/HeaderTable/HeaderTable'
 import { useMoveBack } from '../../hooks/useMoveBack'
+import useThemeContext from '../../hooks/useThemeContext'
 
 export default function ProjectForm() {
   const {
@@ -16,12 +17,14 @@ export default function ProjectForm() {
     handleSubmit,
   } = useForm<AddNewProject>({ mode: 'onChange' })
   const navigate = useNavigate()
+  const { theme } = useThemeContext()
+  const isDarkMode = theme === 'dark'
 
   const { projectId } = useParams<{ projectId: string }>()
   const newProject: boolean = !projectId
 
-  console.log(projectId)
   const goBack = useMoveBack()
+
   const onSubmit = async (data: AddNewProject) => {
     const parsedId = parseInt(projectId!, 10)
     try {
@@ -50,13 +53,35 @@ export default function ProjectForm() {
           PROJECTS_URLS.GET_PROJECT(parsedId),
           Headers
         )
-        console.log(response)
         setValue('title', response?.data?.title)
         setValue('description', response?.data?.description)
       }
       getProject()
     }
-  }, [])
+  }, [newProject, projectId, setValue])
+
+  // Style objects for dark mode
+  const formContainerStyle = {
+    backgroundColor: isDarkMode ? '#1e1e1e' : 'white',
+    color: isDarkMode ? '#e0e0e0' : 'inherit',
+    borderRadius: '0.3rem'
+  }
+
+  const inputStyle = {
+    backgroundColor: isDarkMode ? '#2d2d2d' : 'white',
+    color: isDarkMode ? '#e0e0e0' : 'inherit',
+    borderColor: isDarkMode ? '#444' : 'light'
+  }
+
+  const labelStyle = {
+    color: isDarkMode ? '#e0e0e0' : 'inherit'
+  }
+
+  const cancelButtonStyle = {
+    backgroundColor: isDarkMode ? 'transparent' : 'transparent',
+    color: isDarkMode ? '#e0e0e0' : '#212529',
+    borderColor: isDarkMode ? '#e0e0e0' : '#212529'
+  }
 
   return (
     <>
@@ -67,34 +92,47 @@ export default function ProjectForm() {
         namebtn="View All Projects"
       />
       <form className="py-4 px-5 mx-5">
-        <div className="row table bg-white rounded-3 p-3 shadow-sm">
+        <div
+          className="row p-3 shadow-sm"
+          style={formContainerStyle}
+        >
           <div className="col-md-12 p-3">
             <div className="mb-3">
-              <label htmlFor="projectName" className="form-label h5">
+              <label
+                htmlFor="projectName"
+                className="form-label h5"
+                style={labelStyle}
+              >
                 Title
               </label>
               <input
                 type="text"
-                className="form-control rounded-4 border-light border-3 py-3"
+                className="form-control rounded-4 border-3 py-3"
                 id="projectName"
                 placeholder="Enter Project Title"
+                style={inputStyle}
                 {...register('title', {
                   required: 'project title is required',
                 })}
               />
             </div>
             {errors.title && (
-              <span className="text-danger ">{errors.title.message}</span>
+              <span className="text-danger">{errors.title.message}</span>
             )}
             <div className="mb-3">
-              <label htmlFor="projectDescription" className="form-label h5">
+              <label
+                htmlFor="projectDescription"
+                className="form-label h5"
+                style={labelStyle}
+              >
                 Description
               </label>
               <input
                 type="text"
-                className="form-control rounded-4 border-light border-3 py-3"
+                className="form-control rounded-4 border-3 py-3"
                 id="projectDescription"
                 placeholder="Enter Description"
+                style={inputStyle}
                 {...register('description', {
                   required: 'project description is required',
                 })}
@@ -106,14 +144,22 @@ export default function ProjectForm() {
               </span>
             )}
           </div>
-          <div className="btn-container d-flex justify-content-between align-items-center border-1 border-top py-4">
-            <span
+          <div
+            className="btn-container d-flex justify-content-between align-items-center border-1 py-4"
+            style={{
+              borderTop: isDarkMode ? '1px solid #444' : '1px solid #dee2e6'
+            }}
+          >
+            <button
+              type="button"
               onClick={() => goBack()}
               className="btn btn-outline-dark rounded-pill py-2 px-md-4"
+              style={cancelButtonStyle}
             >
               Cancel
-            </span>
+            </button>
             <button
+              type="button"
               onClick={handleSubmit(onSubmit)}
               className="btn bg-custom-warning rounded-pill py-2 px-md-4 text-white"
             >

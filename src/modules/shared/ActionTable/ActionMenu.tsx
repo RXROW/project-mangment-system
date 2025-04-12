@@ -1,5 +1,6 @@
 import { FC } from 'react'
 import { useAuthContext } from '../../../context/AuthContext'
+import useThemeContext from '../../../hooks/useThemeContext'
 
 interface ActionMenuProps {
   onView?: () => void
@@ -17,13 +18,25 @@ const ActionMenu: FC<ActionMenuProps> = ({
   user,
 }) => {
   const { loginData } = useAuthContext()
+  const { theme } = useThemeContext()
+  const isDarkMode = theme === 'dark'
+
+  // Dynamic classes based on theme
+  const dropdownMenuClass = isDarkMode
+    ? "dropdown-menu dropdown-menu-dark"
+    : "dropdown-menu"
+
+  const iconClass = isDarkMode
+    ? "mx-2 text-info fa"
+    : "mx-2 text-success fa"
+
   return (
     <>
       {loginData?.userGroup !== 'Manger' && (
-        <td>
+        <td className={isDarkMode ? "text-white" : ""}>
           <div className="action-menu">
             <button
-              className="border-0 bg-transparent"
+              className={`border-0 ${isDarkMode ? 'bg-transparent text-white' : 'bg-transparent'}`}
               type="button"
               id="dropdownMenuButton"
               data-bs-toggle="dropdown"
@@ -31,26 +44,25 @@ const ActionMenu: FC<ActionMenuProps> = ({
             >
               <i className="fa-solid fa-ellipsis-vertical"></i>
             </button>
-            {name == 'user' && (
+            {name === 'user' && (
               <ul
-                className="dropdown-menu"
+                className={dropdownMenuClass}
                 aria-labelledby="dropdownMenuButton"
               >
                 <li
                   role="button"
-                  className="d-flex align-items-center  text-success mb-2 dropdown-item"
+                  className={`d-flex align-items-center ${isDarkMode ? 'text-info' : 'text-success'} mb-2 dropdown-item`}
                   onClick={onEdit}
                 >
                   <i
-                    className={`fa fa-toggle-${
-                      user.isActivated ? 'off' : 'on'
-                    } me-2`}
+                    className={`fa fa-toggle-${user.isActivated ? 'off' : 'on'
+                      } me-2`}
                   ></i>
                   <span>{user.isActivated ? 'Deactivate' : 'Activate'}</span>
                 </li>
                 <li
                   role="button"
-                  className="d-flex align-items-center  text-primary dropdown-item"
+                  className={`d-flex align-items-center ${isDarkMode ? 'text-info' : 'text-primary'} dropdown-item`}
                   onClick={onView}
                 >
                   <i className="fa fa-eye me-2"></i>
@@ -58,20 +70,22 @@ const ActionMenu: FC<ActionMenuProps> = ({
                 </li>
               </ul>
             )}
-            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <li role="button" onClick={onView} className="dropdown-item">
-                <i className="mx-2 text-success fa-regular fa-eye"></i>
-                View
-              </li>
-              <li role="button" onClick={onEdit} className="dropdown-item">
-                <i className="mx-2 text-success fa-regular fa-pen-to-square"></i>
-                Edit
-              </li>
-              <li role="button" onClick={onDelete} className="dropdown-item ">
-                <i className="mx-2 text-success fa-solid fa-trash-can"></i>
-                Delete
-              </li>
-            </ul>
+            {!name && (
+              <ul className={dropdownMenuClass} aria-labelledby="dropdownMenuButton">
+                <li role="button" onClick={onView} className="dropdown-item">
+                  <i className={`${iconClass}-regular fa-eye`}></i>
+                  View
+                </li>
+                <li role="button" onClick={onEdit} className="dropdown-item">
+                  <i className={`${iconClass}-regular fa-pen-to-square`}></i>
+                  Edit
+                </li>
+                <li role="button" onClick={onDelete} className="dropdown-item">
+                  <i className={`${iconClass}-solid fa-trash-can`}></i>
+                  Delete
+                </li>
+              </ul>
+            )}
           </div>
         </td>
       )}
